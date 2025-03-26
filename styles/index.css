@@ -117,3 +117,38 @@ header{
 
 
 /* search  */
+
+.search input{
+    width: 100%;
+    text-align: center;
+    padding: 3px;
+    margin-top: 3px;
+}
+
+.search input:focus{
+    outline: 2px solid var(--accent-color-bold);
+}
+
+.search input::placeholder {
+    color: gray;
+}
+
+
+
+
+
+/* ==================================== */
+/* introduction  */
+
+.introduction{
+    background: url(../assets/background.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.intro{
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: var(--image-blur-color);
+}
