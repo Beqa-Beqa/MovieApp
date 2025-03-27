@@ -240,15 +240,14 @@ header{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 320%;
+    width: fit-content;
     margin-top: 30px;
     gap: 60px;
 }
 
 
 .new-movies-card{
-    max-width: 280px;
-    width: 100%;
+    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -268,7 +267,6 @@ header{
     transform: scale(1.1);
 }
 
-
 .new-movies-card img{
     width: 100%;
     border-top-left-radius: 20px;
@@ -280,13 +278,13 @@ header{
 
 
 /* ============================================= */
-/* new movies  */
+/* Popular movies  */
 
-.pupulad-movies-section{
+.popular-movies-section{
     position: relative;
 }
 
-.pupulad-movies{
+.popular-movies{
     margin-top: 20px;
     display: flex;
     flex-direction: column;
@@ -297,23 +295,22 @@ header{
     padding-bottom: 50px;
 }
 
-.pupulad-movies-title h1{
+.popular-movies-title h1{
     position: absolute;
 }
 
-.pupulad-movies-cards{
+.popular-movies-cards{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 320%;
+    width: fit-content;
     margin-top: 30px;
     gap: 60px;
 }
 
 
-.pupulad-movies-card{
-    max-width: 280px;
-    width: 100%;
+.popular-movies-card{
+    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -329,12 +326,12 @@ header{
     transition: .3s;
 }
 
-.pupulad-movies-card:hover{
+.popular-movies-card:hover{
     transform: scale(1.1);
 }
 
 
-.pupulad-movies-card img{
+.popular-movies-card img{
     width: 100%;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -371,15 +368,14 @@ header{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 320%;
+    width: fit-content;
     margin-top: 30px;
     gap: 60px;
 }
 
 
 .tv-shows-card{
-    max-width: 280px;
-    width: 100%;
+    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -404,4 +400,146 @@ header{
     width: 100%;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ////////////////////////////////////////////////// */
+/* responsive  */
+
+/* 320 - 570 */
+
+@media (min-width: 320px) and (max-width: 570px) {
+    .container {
+        max-width: 570px;
+    }
+
+    .new-movies-cards{
+        /* padding-left: 20px; */
+    }
+
+    /* .new-movies-card{
+        max-width: 300px;
+        width: 100%;
+    } */
+
+
+    .intro-text{
+        width: 70%;
+    }
+}
+
+
+@media (min-width: 570px) and (max-width: 1090px) {
+    .container {
+        max-width: 800px;
+    }
+
+
+
+    .intro-text{
+        width: 70%;
+    }
+
+}
+
+
+@media (min-width: 1090px) {
+    .container {
+        max-width: 1440px;
+    }
+
+    .intro{
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+    }
+
+    .intro-text{
+        width: 40%;
+        gap: 20px;
+    }
+
+    .intro-text h1{
+        font-size: 40px;
+        font-weight: 900;
+
+    }
+
+    .intro-text p{
+        font-size: 30px;
+    }
+
+    .intro-text button{
+        font-size: 25px;
+    }
+
+    .burger-menu{
+        display: none;
+    }
+
+    .header-logo a{
+        font-size: 30px;
+    }
+
+    .header-nav{
+        display: flex;
+        position: unset;
+        flex-direction: row;
+        min-height: auto;
+    }
+
+    .header-nav a{
+        font-size: 20px;
+        gap: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    #burger-menu-close-button{
+        display: none;
+    }
+
+    .hover-menu{
+        left: 0;
+        top: 100%;
+        padding: 15px;
+        min-height: auto;
+    }
+
+
+
+    .new-movies-card{
+        width:400px;
+  
+    }
+
+    .popular-movies-card{
+        width:400px;
+  
+    }
+
+    .tv-shows-card{
+        width:400px;
+  
+    }
+
+ 
 }
