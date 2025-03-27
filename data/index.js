@@ -1,1 +1,1 @@
-export { headerNav } from './staticData.js';
+export { headerNavData } from './staticData.js';

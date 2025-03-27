@@ -1,4 +1,4 @@
-import { headerNav } from "../data/index.js";
+import { headerNavData } from "../data/index.js";
 
 
 // header 
@@ -26,7 +26,7 @@ overlay.addEventListener('click', () => {
     overlay.style.display = 'none'
 })
 
-headerNav.map((nav) => {
+headerNavData.map((nav) => {
     const navBar = document.createElement('a');
     const icon = document.createElement('i');
     const navSpan = document.createElement('span');
@@ -65,3 +65,11 @@ headerNav.map((nav) => {
 });
 
 headerNavElement.append(fragment);
+
+
+
+
+
+// ==================================
+// carousel 
+

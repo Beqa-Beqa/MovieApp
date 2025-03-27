@@ -1,6 +1,6 @@
 // header 
 
-export const headerNav = [
+export const headerNavData = [
     {
         name:'Home',
         classes:['bx', 'bxs-home'],
