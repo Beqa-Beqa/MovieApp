@@ -1,0 +1,1 @@
+export { headerNavData } from './staticData.js';
