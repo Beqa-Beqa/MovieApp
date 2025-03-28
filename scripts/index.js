@@ -72,4 +72,3 @@ headerNavElement.append(fragment);
 
 // ==================================
 // carousel 
-
