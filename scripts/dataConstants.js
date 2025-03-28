@@ -1,10 +1,3 @@
-// Enum for API
-export const GENDERS_ENUM = {
-    FEMALE: 1,
-    MALE: 2
-};
-
-// App state Enums
 export const ROUTES = {
     ADDRESS_NAME: 'movieapp_route',
     VALUES: {
