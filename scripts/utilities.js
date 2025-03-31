@@ -135,7 +135,7 @@ export const getMoviesByGenre = async (genreId, page=1) => {
  * 
  * @param {string} path 
  */
-export const getImage = (path) => `${APIImgBase}/${path}`;
+export const getImage = (path, width=500) => path ? `${APIImgBase}${width}/${path}` : null;
 
 
 export const getNewMovies = async (page = 1) => {

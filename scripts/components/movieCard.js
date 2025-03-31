@@ -1,6 +1,7 @@
 import { getImage } from "../utilities.js";
 
-export const createMovieCard = (movie, isTvShow = false) => {
+
+export const createMovieCard = (movie, moviesSectionContainer, isTvShow = false) => {
 	const containerElement = document.createElement("div");
 	containerElement.classList.add("movie-card");
 
@@ -15,13 +16,18 @@ export const createMovieCard = (movie, isTvShow = false) => {
         first_air_date
 	} = movie;
 
+	const backdropUrl = getImage(backdrop_path, 1280);
+
 	const innerContent = `
-        <img src=${poster_path ? getImage(poster_path) : `./assets/image-not-found.jpg`} alt="Movie poster" />
-        <h3>${isTvShow ? name : title}</h3>
-        <p>${isTvShow ? first_air_date : release_date}</p>
+        <img data-backdrop-url=${backdropUrl} src=${poster_path ? getImage(poster_path) : backdrop_path ? getImage(backdrop_path) : `./assets/image-not-found.jpg`} alt="Movie poster" />
+		<div class="movie-card-description">
+        	<h3>${isTvShow ? name : title}</h3>
+        	<p>${isTvShow ? first_air_date : release_date}</p>
+		</div>
     `;
 
 	containerElement.innerHTML = innerContent;
+	containerElement.setAttribute('data-backdrop-url', backdropUrl);
 
 	return containerElement;
 };

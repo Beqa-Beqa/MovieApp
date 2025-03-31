@@ -49,7 +49,7 @@ export const ROUTES = {
 		<section class="introduction">
 			<div class="intro">
 				<div class="intro-text container">
-					<h1 class="typewriter">Script Movie</h1>
+					<h1>Script Movie</h1>
 					<p>
 						"Welcome to Script Movie – Your Cinematic Journey Starts
 						Here!"
@@ -62,46 +62,49 @@ export const ROUTES = {
 		<!-- ======================================== -->
 		<!-- new movies  -->
 
-		<section class="movies-section">
+		<section class="movies-section" id="new-movies-section-container">
 			<div class="movies container">
 				<div class="movies-section-title">
-					<h1>New Movies</h1>
+					<h2>New Movies</h2>
 				</div>
 
 				<div id="new-movies-container" class="movie-cards-container">
 
 				</div>
 			</div>
+			<div class="movies-overlay"></div>
 		</section>
 
 		<!-- ======================================== -->
 		<!-- Popular  -->
 
-		<section class="movies-section">
+		<section class="movies-section" id="popular-movies-section-container">
 			<div class="movies container">
 				<div class="movies-section-title">
-					<h1>Popular Movies</h1>
+					<h2>Popular Movies</h2>
 				</div>
 
 				<div id="popular-movies-container" class="movie-cards-container">
 					
 				</div>
 			</div>
+			<div class="movies-overlay"></div>
 		</section>
 
 		<!-- ======================================== -->
-		<!-- new movies  -->
+		<!-- Tv-Shows  -->
 
-		<section class="movies-section">
+		<section class="movies-section" id="tv-shows-section-container">
 			<div class="movies container">
 				<div class="movies-section-title">
-					<h1>TV-shows</h1>
+					<h2>TV-shows</h2>
 				</div>
 
 				<div id="tv-shows-container" class="movie-cards-container">
 					
 				</div>
 			</div>
+			<div class="movies-overlay"></div>
 		</section>
 
 		<div class="overlay"></div>
