@@ -1,74 +1,36 @@
-import { headerNavData } from "../data/index.js";
+import { Router } from "./router.js";
+import { ROUTES } from "./dataConstants.js";
+import { initHeaderNav, movieCard } from "./components/index.js";
+import { getNewMovies, getPopularMovies, getPopularTVShows } from './utilities.js';
+import createMovieCard from "./components/movieCard.js";
 
+const router = new Router('root', ROUTES);
+router.renderRoute();
 
 // header 
+initHeaderNav();
 
-const headerNavElement = document.querySelector('.header-nav');
-const fragment = document.createDocumentFragment();
-const hoverMenu = document.querySelector('.hover-menu');
-const burgerMenu = document.querySelector('.bx-menu');
-const headerNavigation = document.querySelector('.header-nav');
-const overlay = document.querySelector('.overlay')
-const burgerMenuCloseBtn = document.getElementById('burger-menu-close-button');
+const renderMovies = (movies, container, isTvShow=false) => {
+    const fragment = document.createDocumentFragment();
 
-burgerMenuCloseBtn.addEventListener('click', () => {
-    headerNavigation.classList.remove('show')
-    overlay.style.display = 'none'
-});
+    if(!movies) fragment.append('ERROR ERROR ERROR ERROR ERROR ERROR');
+    else fragment.append(...movies.map(movie => createMovieCard(movie, isTvShow)));
 
-burgerMenu.addEventListener('click' , () => {
-    headerNavigation.classList.add('show');
-    overlay.style.display = 'block'
-})
+    container.append(fragment);
+}
 
-overlay.addEventListener('click', () => {
-    headerNavigation.classList.remove('show')
-    overlay.style.display = 'none'
-})
+if(router.route === ROUTES.VALUES.HOME) {
+    const initHomepage = async () => {
+        const [newMovies, popularMovies, tvShows] = await Promise.all([getNewMovies(), getPopularMovies(), getPopularTVShows()]);
 
-headerNavData.map((nav) => {
-    const navBar = document.createElement('a');
-    const icon = document.createElement('i');
-    const navSpan = document.createElement('span');
-
-    icon.classList.add(...nav.classes);
-
-    navSpan.textContent = nav.name;
-
-    navBar.setAttribute('href', nav.link);
-    navBar.append(icon);
-    navBar.append(navSpan);
-
-    navBar.addEventListener('mouseenter', () => {
-        nav.subLinks && hoverMenu.classList.add('show');
-
-        nav.subLinks?.map((el) => {
-            const subLink = document.createElement('a');
-            subLink.textContent = el.name;
-            subLink.setAttribute('href', el.link);
-            hoverMenu.append(subLink)
-            hoverMenu.classList.add('hover-menu-open')
-            navSpan.append(hoverMenu)
-
-        })
+        const newMoviesContainer = document.getElementById('new-movies-container');
+        const popularMoviesContainer = document.getElementById('popular-movies-container');
+        const tvShowsContainer = document.getElementById('tv-shows-container');
         
-    })
+        renderMovies(newMovies.results, newMoviesContainer);
+        renderMovies(popularMovies.results, popularMoviesContainer);
+        renderMovies(tvShows.results, tvShowsContainer, true);
+    };
 
-    navBar.addEventListener('mouseleave', () => {
-        hoverMenu.classList.remove('show');
-        hoverMenu.classList.remove('hover-menu-open')
-
-        hoverMenu.innerHTML= ''
-    })
-
-    fragment.append(navBar);
-});
-
-headerNavElement.append(fragment);
-
-
-
-
-
-// ==================================
-// carousel 
+    initHomepage();
+}
