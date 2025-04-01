@@ -226,7 +226,6 @@ header{
     border-left: 0;
     border-collapse: collapse;
     padding: 2rem 0;
-
 }
 
 .movies{
@@ -239,7 +238,10 @@ header{
 
 .movies-section-title h2{
     position: absolute;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
+    background-color: var(--accent-color-fade);
+    padding: 0 1rem;
+    border-top-left-radius: 20px;
 }
 
 .movie-cards-container{
