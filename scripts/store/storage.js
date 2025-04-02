@@ -2,7 +2,7 @@ import {
 	getNewMovies,
 	getPopularMovies,
 	getPopularTVShows,
-} from "./utilities.js";
+} from "../utilities/utilities.js";
 
 export class MovieStorage {
 	// Private storage map

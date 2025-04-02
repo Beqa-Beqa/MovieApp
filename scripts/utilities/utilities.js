@@ -152,3 +152,32 @@ export const getNewMovies = async (page = 1) => {
 	const url = `https://api.themoviedb.org/3/discover/movie?language=en-US&page=${page}&sort_by=release_date.desc&primary_release_date.lte=${ltDate}`;
 	return await makeRequest(url);
 }
+
+
+/**
+ *
+ * @param {string} target Id of the target element where the video snippet is intended to be rendered at
+ * @param {string} url url of the id to be rendered
+ * @returns {Boolean} if everything is finished successfully function returns true, otherwise false
+ */
+export const renderVideoSnippetYT = (target, url) => {
+	const elem = document.getElementById(target);
+
+	if (!elem) {
+		console.error(`Element with id ${target} not found!`);
+		return false;
+	}
+
+	const frameElement = document.createElement("iframe");
+
+	try {
+		frameElement.setAttribute("src", url);
+		frameElement.setAttribute("title", "Movie Video from YT");
+		frameElement.classList.add("w-100", "h-100");
+		elem.append(frameElement);
+		return true;
+	} catch (e) {
+		console.error(`Failed to render video snipper: ${e.message}`);
+		return false;
+	}
+};

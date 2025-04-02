@@ -58,7 +58,8 @@ export class Router {
 	/**
 	 * Renders route based on current route state
 	 */
-	renderRoute(template) {
+	renderRoute(template, hydrator) {
 		this.#rootRef.innerHTML = template;
+		hydrator();
 	}
 }
