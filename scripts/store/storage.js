@@ -8,6 +8,9 @@ export class MovieStorage {
 	// Private storage map
 	#storage;
 
+	// Private property for page fetcher generator functions
+	#pageFetcher
+
 	/**
 	 * Creates an instance of storage for movies which keeps types of movies
 	 * by their pages and ids
@@ -18,6 +21,12 @@ export class MovieStorage {
 			["popularMovies", this.#createEmptyCollection()],
 			["tvShows", this.#createEmptyCollection()],
 		]);
+
+		this.#pageFetcher = {
+			getNewMoviesNextPage: this.#getPageGenerator(),
+			getPopularMoviesNextPage: this.#getPageGenerator(),
+			getTvShowsNextPage: this.#getPageGenerator()
+		};
 	}
 
 	/**
@@ -26,6 +35,18 @@ export class MovieStorage {
 	 */
 	#createEmptyCollection() {
 		return { moviesByPage: new Map(), moviesById: new Map() };
+	}
+
+
+	#getPageGenerator() {
+		const generator = function*() {
+			let page = 0;
+			while(true) yield ++page;
+		};
+
+		const generatorInstance = generator();
+
+		return () => generatorInstance.next();
 	}
 
 
@@ -62,28 +83,28 @@ export class MovieStorage {
 
 	/**
 	 * 
-	 * @param {number} page page to be fetched
+	 * @param {number} page page to be fetched, by default next ( latest + 1 ) page will be fetched
 	 * @returns result of the fetch, array either containing new movies or an empty one
 	 */
-	async getNewMovies(page = 1) {
+	async getNewMovies(page = this.#pageFetcher.getNewMoviesNextPage().value) {
 		return await this.#getMovies("newMovies", page, getNewMovies);
 	}
 
 	/**
 	 * 
-	 * @param {number} page page to be fetched
+	 * @param {number} page page to be fetched, by default next ( latest + 1 ) page will be fetched
 	 * @returns result of the fetch, array either containing popular movies or an empty one
 	 */
-	async getPopularMovies(page = 1) {
+	async getPopularMovies(page = this.#pageFetcher.getPopularMoviesNextPage().value) {
 		return await this.#getMovies("popularMovies", page, getPopularMovies);
 	}
 
 	/**
 	 * 
-	 * @param {number} page page to be fetched
+	 * @param {number} page page to be fetched, by default next ( latest + 1 ) page will be fetched
 	 * @returns result of the fetch, array either containing tv shows or an empty one
 	 */
-	async getTvShows(page = 1) {
+	async getTvShows(page = this.#pageFetcher.getTvShowsNextPage().value) {
 		return await this.#getMovies("tvShows", page, getPopularTVShows);
 	}
 

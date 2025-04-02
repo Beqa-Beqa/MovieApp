@@ -139,9 +139,9 @@ const handleMovieClick = (event, router) => {
 
 async function initHomepage(router, movieStorage) {
 	const [newMovies, popularMovies, tvShows] = await Promise.all([
-		movieStorage.getNewMovies(1),
-		movieStorage.getPopularMovies(1),
-		movieStorage.getTvShows(1),
+		movieStorage.getNewMovies(),
+		movieStorage.getPopularMovies(),
+		movieStorage.getTvShows(),
 	]);
 
 	const newMoviesContainer = document.getElementById("new-movies-container");
