@@ -3,7 +3,7 @@ import { APIBase, APIImgBase, APIReadKey, YTVidBase } from "./apiConstants.js";
 /**
  * 
  * @param {string} url 
- * @returns Promise, which after fulfilled returns result of the request
+ * @returns Promise, which after fulfilled returns result of the request or an empty object if failed
  */
 const makeRequest = async (url) => {
 	try {
@@ -16,10 +16,10 @@ const makeRequest = async (url) => {
 		});
 		if (!result.ok)
 			throw new Error(`Request failed! Status: ${result.status}`);
-		return await result.json();
+		return {success: true, data: await result.json()};
 	} catch (e) {
 		console.error(`Something went wrong ${e.message}`);
-		return {};
+		return {success: false, error: e.message};
 	}
 };
 
@@ -138,6 +138,10 @@ export const getMoviesByGenre = async (genreId, page=1) => {
 export const getImage = (path, width=500) => path ? `${APIImgBase}${width}/${path}` : null;
 
 
+/**
+ * 
+ * @param {number} page 
+ */
 export const getNewMovies = async (page = 1) => {
 	const date = new Date();
 	const fullYear = date.getFullYear();

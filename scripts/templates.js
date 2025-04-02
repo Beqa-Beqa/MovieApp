@@ -102,7 +102,9 @@ export const TEMPLATES = {
 	<div class="overlay"></div>
 			`;
 	},
-	MOVIE_DETAILS: () => {
+	MOVIE_DETAILS: (movieId) => {
+		console.log(movieId);
+	
 		return `
 		<!-- header  -->
 		<header>
