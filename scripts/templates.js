@@ -2,23 +2,7 @@ export const TEMPLATES = {
 	HOME: () => {
 		return `
 					<!-- ================================================ -->
-	<!-- header  -->
-	<header>
-		<div class="header container">
-			<div class="header-logo">
-				<a href="#">Script Movie <i class="bx bx-movie"></i></a>
-			</div>
 
-			<div class="header-nav">
-				<button id="burger-menu-close-button">X</button>
-			</div>
-
-			<div class="burger-menu">
-				<i class="bx bx-menu"></i>
-			</div>
-			<div class="hover-menu"></div>
-		</div>
-	</header>
 
 	<!-- ============================================================= -->
 	<!-- search  -->
@@ -104,23 +88,7 @@ export const TEMPLATES = {
 	},
 	MOVIE_DETAILS: () => {
 		return `
-		<!-- header  -->
-		<header>
-			<div class="header container">
-				<div class="header-logo">
-					<a href="#">Script Movie <i class="bx bx-movie"></i></a>
-				</div>
 
-				<div class="header-nav">
-					<button id="burger-menu-close-button">X</button>
-				</div>
-
-				<div class="burger-menu">
-					<i class="bx bx-menu"></i>
-				</div>
-				<div class="hover-menu"></div>
-			</div>
-		</header>
 
 		<!-- ============================================================= -->
 		<h1>Hello again, this is movie details page</h1>

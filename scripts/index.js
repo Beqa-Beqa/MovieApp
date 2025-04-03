@@ -8,6 +8,8 @@ import { MovieStorage } from './storage.js';
 const router = new Router('root', GLOBAL_ROUTES);
 const movieStorage = new MovieStorage('movieapp_movie_storage');
 
+initHeaderNav();
+
 const renderMovies = (movies, container, isTvShow=false) => {
     const fragment = document.createDocumentFragment();
     if(!movies) fragment.append('ERROR ERROR ERROR ERROR ERROR ERROR');
