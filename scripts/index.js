@@ -12,15 +12,16 @@ const getHashParams = (route_) => {
 		const routeBeforeQueryString = route[0];
 		const queryParams = new URLSearchParams(route[1] || "");
 		const movieId = queryParams.get(PARAMS.MOVIE_ID);
+        const movieType = queryParams.get(PARAMS.MOVIE_TYPE);
 
-		if (routeBeforeQueryString === GLOBAL_ROUTES.MOVIE_DETAILS && !movieId)
+		if (routeBeforeQueryString === GLOBAL_ROUTES.MOVIE_DETAILS && (!movieId || !movieType))
 			throw new Error(
-				"No movie id was provided while trying to render movie details page!"
+				"No movie id or movie type was provided while trying to render movie details page!"
 			);
 
 		return {
 			route: routeBeforeQueryString,
-			params: { movieId },
+			params: { movieId, movieType },
 		};
 	} catch (e) {
 		console.error(e);
@@ -37,7 +38,7 @@ const handleRouteChange = (router_) => {
 		router_.renderRoute(homepageTemplate(), hydrateHomepage);
 	} else if (route === GLOBAL_ROUTES.MOVIE_DETAILS) {
 		router_.renderRoute(
-			movieDetailsTemplate(params.movieId),
+			movieDetailsTemplate(params.movieId, params.movieType),
 			hydrateMovieDetailsPage
 		);
 	}

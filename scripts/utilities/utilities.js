@@ -53,8 +53,9 @@ export const getVideoYTURL = (snippetKey) => `${YTVidBase}/${snippetKey}`;
  * 
  * @param {string} movieId 
  */
-export const getMovieDetailsById = async (movieId) => {
-	const url = `${APIBase}/movie/${movieId}?language=en-US`;
+export const getMovieDetailsById = async (movieId, type) => {
+	// movies | tv 
+	const url = `${APIBase}/${type}/${movieId}?language=en-US`;
 	return await makeRequest(url);
 };
 

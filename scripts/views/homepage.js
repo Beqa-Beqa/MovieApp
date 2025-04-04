@@ -1,29 +1,10 @@
 import { router, movieStorage } from '../init.js';
-import { GLOBAL_ROUTES } from "../router/routes.js";
+import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
 import { createMovieCard } from '../components/movieCard.js';
+import { MOVIES } from '../enums.js';
 
-export const homepageTemplate = () => {
+export const homepageTemplate = async () => {
 	return `
-					<!-- ================================================ -->
-	<!-- header  -->
-	<header>
-		<div class="header container">
-			<div class="header-logo">
-				<a href="#">Script Movie <i class="bx bx-movie"></i></a>
-			</div>
-
-			<div class="header-nav">
-				<button id="burger-menu-close-button">X</button>
-			</div>
-
-			<div class="burger-menu">
-				<i class="bx bx-menu"></i>
-			</div>
-			<div class="hover-menu"></div>
-		</div>
-	</header>
-
-	<!-- ============================================================= -->
 	<!-- search  -->
 
 	<section class="search-section">
@@ -107,13 +88,13 @@ export const homepageTemplate = () => {
     `;
 };
 
-const renderMovies = (movies, container, isTvShow = false) => {
+const renderMovies = (movies, container, type) => {
 	const fragment = document.createDocumentFragment();
-	if (!movies) fragment.append("ERROR ERROR ERROR ERROR ERROR ERROR");
 
+	if (!movies) fragment.append("ERROR ERROR ERROR ERROR ERROR ERROR");
 	else
 		fragment.append(
-			...movies.map((movie) => createMovieCard(movie, isTvShow))
+			...movies.map((movie) => createMovieCard(movie, type))
 		);
 	container.append(fragment);
 };
@@ -133,7 +114,8 @@ const handleMovieClick = (event, router) => {
 	const isCardElem = parentElem.classList.contains("movie-card");
 	if (isCardElem) {
 		const movieId = parseInt(parentElem.getAttribute("data-movie-id"));
-		router.route = `${GLOBAL_ROUTES.MOVIE_DETAILS}?movie_id=${movieId}`;
+		const movieType = parentElem.getAttribute('data-movie-type')
+		router.route = `${GLOBAL_ROUTES.MOVIE_DETAILS}?${PARAMS.MOVIE_ID}=${movieId}&${PARAMS.MOVIE_TYPE}=${movieType}`;
 	}
 };
 
@@ -179,9 +161,9 @@ async function initHomepage(router, movieStorage) {
 		(container) => container.addEventListener("click", (e) => handleMovieClick(e, router))
 	);
 
-	renderMovies(newMovies, newMoviesContainer);
-	renderMovies(popularMovies, popularMoviesContainer);
-	renderMovies(tvShows, tvShowsContainer, true);
+	renderMovies(newMovies, newMoviesContainer, MOVIES.NEW);
+	renderMovies(popularMovies, popularMoviesContainer, MOVIES.POPULAR);
+	renderMovies(tvShows, tvShowsContainer, MOVIES.TV);
 };
 
 export const hydrateHomepage = initHomepage.bind(null, router, movieStorage);

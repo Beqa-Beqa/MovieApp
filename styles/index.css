@@ -80,7 +80,15 @@ header{
 .header-nav a{
     color: var(--accent-color-fade);
     position: relative;
+    transition: .2s;
+    border-radius: 15px;
     padding: 3px 10px;
+}
+
+
+.header-nav a:hover{
+    color: var(--accent-color-bold);
+    background-color: var(--accent-color-fade);
 }
 
 
@@ -88,29 +96,6 @@ header{
     display: block;
 }
 
-.hover-menu {
-    position: absolute;
-    left: -105px;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--accent-color-bold);
-    transition: .3s;
-    border-radius: 20px;
-    padding: 20px;
-    display: none;
-    padding-right: 0;
-    width: max-content;
-}
-
-.hover-menu a:hover{
-    color: red;
-}
-
-.hover-menu-open{
-    display: flex;
-}
 
 
 

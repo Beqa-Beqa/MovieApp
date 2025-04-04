@@ -4,5 +4,6 @@ export const GLOBAL_ROUTES = {
 }
 
 export const PARAMS = {
-    MOVIE_ID: 'movie_id'
+    MOVIE_ID: 'movie_id',
+    MOVIE_TYPE: 'movie_type'
 }

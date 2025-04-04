@@ -5,9 +5,3 @@ export const APIReadKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhODNjZjcyMjg3NTJiM2E0
 export const APIKey = 'a83cf7228752b3a466907b5040a202ed';
 
 export const YTVidBase = 'https://www.youtube.com/embed';
-
-// Enum for API
-export const GENDERS_ENUM = {
-    FEMALE: 1,
-    MALE: 2
-};

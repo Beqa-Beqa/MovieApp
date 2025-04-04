@@ -58,8 +58,8 @@ export class Router {
 	/**
 	 * Renders route based on current route state
 	 */
-	renderRoute(template, hydrator) {
-		this.#rootRef.innerHTML = template;
+	async renderRoute(template, hydrator) {
+		this.#rootRef.innerHTML = await template;
 		hydrator();
 	}
 }
