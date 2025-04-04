@@ -1,166 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Script Movie</title>
-  <link rel="stylesheet" href="./styles/index.css" />
-  <link
-    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-    rel="stylesheet"
-  />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap"
-    rel="stylesheet"
-  />
-  <script type="module" src="./scripts/index.js" defer></script>
-</head>
-<body>
-  <!-- ================================================ -->
-  <!-- header  -->
-  <header>
-    <div class="header container">
-      <div class="header-logo">
-        <a href="#">Script Movie <i class="bx bx-movie"></i></a>
-      </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Script Movie</title>
+		<link rel="stylesheet" href="./styles/index.css" />
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap"
+			rel="stylesheet"
+		/>
+		<script type="module" src="./scripts/index.js" defer></script>
+	</head>
+	<body>
+		<!-- header  -->
+		<header>
+			<div class="header container">
+				<div class="header-logo">
+					<a href="#">Script Movie <i class="bx bx-movie"></i></a>
+				</div>
 
-      <div class="header-nav">
-        <button id="burger-menu-close-button">X</button>
-      </div>
+				<div class="header-nav">
+					<button id="burger-menu-close-button">X</button>
 
-      <div class="burger-menu">
-        <i class="bx bx-menu"></i>
-      </div>
-      <div class="hover-menu"></div>
-    </div>
-  </header>
+					<div class="header-link">
+						<a href="#" class="link"><i class="bx bxs-home"></i>Home</a>
+					</div>
+					<div class="header-link">
+						<a href="#" class="link"><i class="bx bxs-movie-play"></i>Movies</a>
+						<div class="hover-menu">
+							<a href="#">Popular</a>
+							<a href="#">New</a>
+						</div>
+					</div>
 
-  <!-- ============================================================= -->
-  <!-- search  -->
+					<div class="header-link">
+						<a href="#" class="link"><i class="bx bxs-film"></i>TV Shows</a>
+						<div class="hover-menu">
+							<a href="#">Georgian</a>
+							<a href="#">Turkish</a>
+							<a href="#">Drama</a>
+						</div>
+					</div>
 
-  <section class="search-section">
-    <div class="search container">
-      <form class="main-search-form">
-        <input
-          class="main-search"
-          type="search"
-          placeholder="Search for Movies, Series or People"
-        />
-        <i class="bx bx-search"></i>
-      </form>
-    </div>
-  </section>
+					<div class="header-link">
+						<a href="#" class="link"><i class="bx bx-male-female"></i>People</a>
+						<div class="hover-menu">
+							<a href="#">Top 10</a>
+							<a href="#">Women</a>
+							<a href="#">Men</a>
+						</div>
+					</div>
 
-  <!-- ==================================================================== -->
-  <!-- introduction  -->
-  <section class="introduction">
-    <div class="intro">
-      <div class="intro-text container">
-        <h1 class="typewriter">Script Movie</h1>
-        <p>
-          "Welcome to Script Movie – Your Cinematic Journey Starts
-          Here!"
-        </p>
-        <button class="see-more">See more</button>
-      </div>
-    </div>
-  </section>
+					<div class="header-link">
+						<a href="#" class="link"><i class="bx bxs-home"></i>More</a>
+						<div class="hover-menu">
+							<a href="#">Contact</a>
+							<a href="#">Reports</a>
+						</div>
+					</div>
+				</div>
 
-  <!-- ======================================== -->
-  <!-- new movies  -->
+				<div class="burger-menu">
+					<i class="bx bx-menu"></i>
+				</div>
+				<div class="hover-menu"></div>
+			</div>
+			<div class="overlay"></div>
+		</header>
 
-  <section class="new-movies-section">
-    <div class="new-movies container">
-      <div class="new-movies-title">
-        <h1>New Movies</h1>
-      </div>
-
-      <div class="new-movies-cards">
-        <div class="new-movies-card">
-          <img src="./assets/background.webp" alt="" />
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-
-        <div class="new-movies-card">
-          <img src="./assets/background.webp" alt="" />
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-
-        <div class="new-movies-card">
-          <img src="./assets/background.webp" alt="" />
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================================== -->
-  <!-- Popular  -->
-
-  <section class="popular-movies-section">
-    <div class="popular-movies container">
-      <div class="popular-movies-title">
-        <h1>Popular Movies</h1>
-      </div>
-
-      <div class="popular-movies-cards">
-        <div class="popular-movies-card">
-          <img src="./assets/background.webp" alt="" />
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-
-        <div class="popular-movies-card">
-          <img src="./assets/background.webp" alt="" />
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-
-        <div class="popular-movies-card">
-          <img src="./assets/background.webp" alt="" />
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================================== -->
-  <!-- new movies  -->
-
-  <section class="tv-shows-section">
-    <div class="tv-shows container">
-      <div class="tv-shows-title">
-        <h1>TV-shows</h1>
-      </div>
-
-      <div class="tv-shows-cards">
-        <div class="tv-shows-card">
-          <img src="./assets/background.webp" alt="">
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-
-        <div class="tv-shows-card">
-          <img src="./assets/background.webp" alt="">
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-
-        <div class="tv-shows-card">
-          <img src="./assets/background.webp" alt="">
-          <h3>Movie Name</h3>
-          <p>12/12/2012</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="overlay"></div>
-</body>
+		<div id="root"></div>
+	</body>
 </html>

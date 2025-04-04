@@ -1,4 +1,4 @@
-import { APIBase, APIReadKey, YTVidBase } from "./apiConstants.js";
+import { APIBase, APIImgBase, APIReadKey, YTVidBase } from "./apiConstants.js";
 
 /**
  * 
@@ -27,7 +27,7 @@ const makeRequest = async (url) => {
  * 
  * @param {number} page 
  */
-export const getMostRecentMovies = async (page = 1) => {
+export const getPopularMovies = async (page = 1) => {
 	const url = `${APIBase}/movie/popular?language=en-US&include_video=true&page=${page}`;
 	return await makeRequest(url);
 };
@@ -128,4 +128,23 @@ export const getMovieCategories = async () => {
 export const getMoviesByGenre = async (genreId, page=1) => {
     const url = `${APIBase}/discover/movie?language=en-US&with_genres=${genreId}&page=${page}`;
     return await makeRequest(url);
+}
+
+
+/**
+ * 
+ * @param {string} path 
+ */
+export const getImage = (path, width=500) => path ? `${APIImgBase}${width}/${path}` : null;
+
+
+export const getNewMovies = async (page = 1) => {
+	const date = new Date();
+	const fullYear = date.getFullYear();
+	const fullMonth = (date.getMonth() + 1).toString().padStart(2, '0');
+	const monthDay = date.getDate();
+	const ltDate = `${fullYear}-${fullMonth}-${monthDay}`;
+
+	const url = `https://api.themoviedb.org/3/discover/movie?language=en-US&page=${page}&sort_by=release_date.desc&primary_release_date.lte=${ltDate}`;
+	return await makeRequest(url);
 }
