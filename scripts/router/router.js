@@ -39,7 +39,9 @@ export class Router {
 	 * the new route value otherwise new error is thrown.
 	 */
 	set route(newRoute) {
-		if (!Object.values(this.#routes).includes(newRoute)) {
+		const routeBeforeQueryString = newRoute.split('?')[0];
+		
+		if (!Object.values(this.#routes).includes(routeBeforeQueryString)) {
 			throw new Error("Invalid route was provided!");
 		}
 
@@ -56,7 +58,8 @@ export class Router {
 	/**
 	 * Renders route based on current route state
 	 */
-	renderRoute(template) {
+	renderRoute(template, hydrator) {
 		this.#rootRef.innerHTML = template;
+		hydrator();
 	}
 }

@@ -1,4 +1,4 @@
-import { getImage } from "../utilities.js";
+import { getImage } from "../utilities/utilities.js";
 
 
 export const createMovieCard = (movie, isTvShow = false) => {
