@@ -1,8 +1,10 @@
 import {
+	getMovieDetailsById,
 	getNewMovies,
 	getPopularMovies,
 	getPopularTVShows,
 } from "../utilities/utilities.js";
+import { MOVIES } from '../enums.js';
 
 export class MovieStorage {
 	// Private storage map
@@ -17,9 +19,9 @@ export class MovieStorage {
 	 */
 	constructor() {
 		this.#storage = new Map([
-			["newMovies", this.#createEmptyCollection()],
-			["popularMovies", this.#createEmptyCollection()],
-			["tvShows", this.#createEmptyCollection()],
+			[MOVIES.NEW, this.#createEmptyCollection()],
+			[MOVIES.POPULAR, this.#createEmptyCollection()],
+			[MOVIES.TV, this.#createEmptyCollection()],
 		]);
 
 		this.#pageFetcher = {
@@ -87,7 +89,7 @@ export class MovieStorage {
 	 * @returns result of the fetch, array either containing new movies or an empty one
 	 */
 	async getNewMovies(page = this.#pageFetcher.getNewMoviesNextPage().value) {
-		return await this.#getMovies("newMovies", page, getNewMovies);
+		return await this.#getMovies(MOVIES.NEW, page, getNewMovies);
 	}
 
 	/**
@@ -96,7 +98,7 @@ export class MovieStorage {
 	 * @returns result of the fetch, array either containing popular movies or an empty one
 	 */
 	async getPopularMovies(page = this.#pageFetcher.getPopularMoviesNextPage().value) {
-		return await this.#getMovies("popularMovies", page, getPopularMovies);
+		return await this.#getMovies(MOVIES.POPULAR, page, getPopularMovies);
 	}
 
 	/**
@@ -105,7 +107,7 @@ export class MovieStorage {
 	 * @returns result of the fetch, array either containing tv shows or an empty one
 	 */
 	async getTvShows(page = this.#pageFetcher.getTvShowsNextPage().value) {
-		return await this.#getMovies("tvShows", page, getPopularTVShows);
+		return await this.#getMovies(MOVIES.TV, page, getPopularTVShows);
 	}
 
 
@@ -114,12 +116,21 @@ export class MovieStorage {
 	 * @param {number} id id of the movie
 	 * @returns movie of which id matches the requested one
 	 */
-	getMovieById(id) {
-		for(let type of ['newMovies', 'popularMovies', 'tvShows']) {
-			const collection = this.#storage.get(type);
-			if(collection.moviesById.has(id)) return collection.moviesById.get(id);
-		}
+	async getMovieById(id, type) {
+		const collection = this.#storage.get(type);
+		if(collection.moviesById.has(id)) return collection.moviesById.get(id);
 
-		return null;
+		try {
+			const result = await getMovieDetailsById(id, type === MOVIES.TV ? 'tv' : 'movie');
+
+			if(!result.success) throw new Error(`Failed to fetch, error: ${result.error}`);
+			
+			collection.moviesById.set(id, result.data);
+			
+			return result.data;
+		} catch (e) {
+			console.error(`Something went wrong while fetching movies: ${e}`);
+			return [];
+		}
 	}
 }
