@@ -44,7 +44,15 @@ export class Router {
 		return this.#rootRef;
 	}
 
+
+	syncRouteWithHash() {
+		this.#route = window.location.hash;
+	}
+
+
 	/**
+	 * @param {string} template Template string
+	 * @param {Function} hydrator Template string hydrator
 	 * Renders route based on current route state
 	 */
 	renderRoute(template, hydrator = () => {}) {
