@@ -41,6 +41,7 @@ const getHashParams = (route_) => {
 };
 
 const handleRouteChange = (router_) => {
+	router_.syncRouteWithHash();
 	const { route, params } = getHashParams(router_.route);
 
 	let template, hydrator;
