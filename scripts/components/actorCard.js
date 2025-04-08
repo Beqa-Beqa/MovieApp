@@ -1,7 +1,9 @@
 import { getImage } from "../utilities/utilities.js";
 
 export const createActorCard = (actorData) => {
-	const { original_name, profile_path } = actorData;
+	let { original_name, profile_path } = actorData;
+    if(original_name.length > 10) original_name = original_name.slice(0, 11) + '...';
+
 	const actorImage = profile_path ? getImage(profile_path, 185) : './assets/user-placeholder.jpg';
     const cardContainer = document.createElement('div');
     cardContainer.classList.add('movie-details-actor-card');

@@ -31,3 +31,7 @@
 .text-light {
     color: snow;
 }
+
+.px-1 {
+    padding: 0 .8rem;
+}

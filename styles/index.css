@@ -200,14 +200,13 @@ header{
 
 .movie-details-actor-card {
     flex-shrink: 0;
-    width: 100px;
+    width: 130px;
     height: 230px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    text-overflow: ellipsis;
 }
 
 .movie-details-actor-card img {
@@ -219,7 +218,7 @@ header{
 
 .movie-details-actor-card span {
     font-size: calc(.7rem + .6vw);
-    text-overflow: ellipsis;
+    inline-size: 100px;
 }
 
 .section-subheader {

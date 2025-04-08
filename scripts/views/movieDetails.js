@@ -18,7 +18,7 @@ export const movieDetailsTemplate = (movieData = {}) => {
 					<img src=${movieData.imgUrl} alt="movie poster">
                     <div class="movie-details-description">
                         <h2 class="movie-description-name section-subheader">${movieData.name}</h2>
-                        <div class="movie-details-description-group">
+                        <div class="movie-details-description-group group-vertical">
                             <span>Release date: ${movieData.releaseDate}</span>
                             <span>Rating: ${movieData.rating}</span>
                             <span>Genres: ${movieData.genres}</span>
@@ -66,6 +66,8 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 	);
 
 	const { cast, _ } = await getCreditsByMovieId(movie.id, true);
+
+	console.log(movie);
 
 	const movieData = {
 		imgUrl: movie.poster_path
