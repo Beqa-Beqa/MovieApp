@@ -86,8 +86,9 @@ export const getPopularTVShows = async (page = 1) => {
  * @param {string} movieId 
  * @param {boolean} onlyActors If true is provided for this parameter, only actors data will be retrieved
  */
-export const getCreditsByMovieId = async (movieId) => {
-	const url = `${APIBase}/movie/${movieId}/credits?language=en-US`;
+export const getCreditsByMovieId = async (movieId, type) => {
+	// type = movies | tv
+	const url = `${APIBase}/${type}/${movieId}/credits?language=en-US`;
 	const result = await makeRequest(url);
     return result.data;
 };

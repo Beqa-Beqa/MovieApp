@@ -8,7 +8,7 @@ import {
 import { GLOBAL_ROUTES } from "../router/routes.js";
 import { renderVideoSnippetYT } from "../utilities/render.js";
 import { MOVIES } from "../enums.js";
-import { createActorCard, createMovieCard } from "../components/index.js";
+import { createActorCard } from "../components/index.js";
 
 export const movieDetailsTemplate = (movieData = {}) => {
 	return `
@@ -65,9 +65,7 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 		params.movieType
 	);
 
-	const { cast, _ } = await getCreditsByMovieId(movie.id, true);
-
-	console.log(movie);
+	const { cast, _ } = await getCreditsByMovieId(movie.id, params.movieType === MOVIES.TV ? "tv" : "movie");
 
 	const movieData = {
 		imgUrl: movie.poster_path
@@ -85,7 +83,7 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 		trailers: (
 			await getVideoSnippetsById(movie.id, params.movieType === MOVIES.TV)
 		).data?.results.filter((snippet) => snippet.type === "Trailer"),
-		cast: cast.length ? cast : null,
+		cast: cast.length ? cast : null
 	};
 
 	router.renderRoute(movieDetailsTemplate(movieData));
