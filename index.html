@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Script Movie</title>
+		<link rel="icon" href="./favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="./styles/index.css" />
 		<link
 			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
@@ -22,22 +23,22 @@
 		<header>
 			<div class="header container">
 				<div class="header-logo">
-					<a href="#">Script Movie <i class="bx bx-movie"></i></a>
+					<a id="headerLogo" href="#">Script Movie <i class="bx bx-movie"></i></a>
 				</div>
 
 				<div class="header-nav">
 					<button id="burger-menu-close-button">X</button>
 
-						<a href="#" class="link"><i class="bx bxs-home"></i>Home</a>
-						<a href="#" class="link"><i class="bx bxs-movie-play"></i>Movies</a>
-						<a href="#" class="link"><i class="bx bxs-film"></i>TV Shows</a>
+					<a id="newMovies" href="#" class="link"><i class="bx bxs-movie-play"></i>New Movies</a>
+					<a id="popularMovies" href="#" class="link"><i class="bx bxs-movie-play"></i>Popular Movies</a>
+					<a id="tvShows" href="#" class="link"><i class="bx bxs-film"></i>TV Shows</a>
 				</div>
 
 				<div class="burger-menu">
-					<i class="bx bx-menu"></i>
+					<i id="burger-menu" class="bx bx-menu"></i>
 				</div>
 			</div>
-			<div class="overlay"></div>
+			<div id="overlay" class="overlay"></div>
 		</header>
 
 		<div id="root"></div>

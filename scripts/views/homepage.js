@@ -1,9 +1,9 @@
-import { router, movieStorage } from '../init.js';
+import { router, movieStorage } from "../init.js";
 import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
-import { createMovieCard } from '../components/movieCard.js';
-import { MOVIES } from '../enums.js';
+import { renderMovies } from "../utilities/render.js";
+import { MOVIES } from "../enums.js";
 
-export const homepageTemplate = async () => {
+export const homepageTemplate = () => {
 	return `
 	<!-- search  -->
 
@@ -22,8 +22,8 @@ export const homepageTemplate = async () => {
 
 	<!-- ==================================================================== -->
 	<!-- introduction  -->
-	<section class="introduction">
-		<div class="intro">
+	<section class="hero-section">
+		<div class="hero-section-inner">
 			<div class="intro-text container">
 				<h1>Script Movie</h1>
 				<p>
@@ -48,7 +48,6 @@ export const homepageTemplate = async () => {
 
 			</div>
 		</div>
-		<div class="movies-overlay"></div>
 	</section>
 
 	<!-- ======================================== -->
@@ -64,7 +63,6 @@ export const homepageTemplate = async () => {
 				
 			</div>
 		</div>
-		<div class="movies-overlay"></div>
 	</section>
 
 	<!-- ======================================== -->
@@ -80,23 +78,11 @@ export const homepageTemplate = async () => {
 				
 			</div>
 		</div>
-		<div class="movies-overlay"></div>
 	</section>
 
 	<div class="overlay"></div>
 			
     `;
-};
-
-const renderMovies = (movies, container, type) => {
-	const fragment = document.createDocumentFragment();
-
-	if (!movies) fragment.append("ERROR ERROR ERROR ERROR ERROR ERROR");
-	else
-		fragment.append(
-			...movies.map((movie) => createMovieCard(movie, type))
-		);
-	container.append(fragment);
 };
 
 const renderBackdrop = (event, sectionContainer) => {
@@ -110,41 +96,42 @@ const renderBackdrop = (event, sectionContainer) => {
 };
 
 const handleMovieClick = (event, router) => {
-	const parentElem = event.target.parentElement;
-	const isCardElem = parentElem.classList.contains("movie-card");
-	if (isCardElem) {
-		const movieId = parseInt(parentElem.getAttribute("data-movie-id"));
-		const movieType = parentElem.getAttribute('data-movie-type')
+	const cardElem = event.target.closest(".movie-card");
+	if (cardElem) {
+		const movieId = parseInt(cardElem.getAttribute("data-movie-id"));
+		const movieType = cardElem.getAttribute("data-movie-type");
 		router.route = `${GLOBAL_ROUTES.MOVIE_DETAILS}?${PARAMS.MOVIE_ID}=${movieId}&${PARAMS.MOVIE_TYPE}=${movieType}`;
 	}
 };
 
 async function initHomepage(router, movieStorage) {
 	const [newMovies, popularMovies, tvShows] = await Promise.all([
-		movieStorage.getNewMovies(),
-		movieStorage.getPopularMovies(),
-		movieStorage.getTvShows(),
+		movieStorage.getNewMovies(1),
+		movieStorage.getPopularMovies(1),
+		movieStorage.getTvShows(1),
 	]);
 
-	const newMoviesContainer = document.getElementById("new-movies-container");
-	const popularMoviesContainer = document.getElementById(
-		"popular-movies-container"
+	const rootElement = router.rootRef;
+
+	const newMoviesContainer = rootElement.querySelector("#new-movies-container");
+	const popularMoviesContainer = rootElement.querySelector(
+		"#popular-movies-container"
 	);
-	const tvShowsContainer = document.getElementById("tv-shows-container");
+	const tvShowsContainer = rootElement.querySelector("#tv-shows-container");
 
 	// Clear the containers before rendering new content
 	newMoviesContainer.innerHTML = "";
 	popularMoviesContainer.innerHTML = "";
 	tvShowsContainer.innerHTML = "";
 
-	const newMoviesSectionContainer = document.getElementById(
-		"new-movies-section-container"
+	const newMoviesSectionContainer = rootElement.querySelector(
+		"#new-movies-section-container"
 	);
-	const popularMoviesSectionContainer = document.getElementById(
-		"popular-movies-section-container"
+	const popularMoviesSectionContainer = rootElement.querySelector(
+		"#popular-movies-section-container"
 	);
-	const tvShowsSectionContainer = document.getElementById(
-		"tv-shows-section-container"
+	const tvShowsSectionContainer = rootElement.querySelector(
+		"#tv-shows-section-container"
 	);
 
 	newMoviesContainer.addEventListener("mouseover", (e) =>
@@ -158,12 +145,15 @@ async function initHomepage(router, movieStorage) {
 	);
 
 	[newMoviesContainer, popularMoviesContainer, tvShowsContainer].forEach(
-		(container) => container.addEventListener("click", (e) => handleMovieClick(e, router))
+		(container) =>
+			container.addEventListener("click", (e) =>
+				handleMovieClick(e, router)
+			)
 	);
 
 	renderMovies(newMovies, newMoviesContainer, MOVIES.NEW);
 	renderMovies(popularMovies, popularMoviesContainer, MOVIES.POPULAR);
 	renderMovies(tvShows, tvShowsContainer, MOVIES.TV);
-};
+}
 
 export const hydrateHomepage = initHomepage.bind(null, router, movieStorage);

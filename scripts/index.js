@@ -1,10 +1,15 @@
-import { router } from "./init.js";
+import { initNavbar, router } from "./init.js";
 import { GLOBAL_ROUTES, PARAMS } from "./router/routes.js";
 import { homepageTemplate, hydrateHomepage } from "./views/homepage.js";
 import {
 	movieDetailsTemplate,
 	hydrateMovieDetailsPage,
 } from "./views/movieDetails.js";
+import { newMoviesTemplate } from './views/newMovies.js';
+import { popularMoviesTemplate } from './views/popularMovies.js';
+import { tvShowsTemplate } from './views/tvShows.js';
+
+initNavbar();
 
 const getHashParams = (route_) => {
 	try {
@@ -12,9 +17,12 @@ const getHashParams = (route_) => {
 		const routeBeforeQueryString = route[0];
 		const queryParams = new URLSearchParams(route[1] || "");
 		const movieId = queryParams.get(PARAMS.MOVIE_ID);
-        const movieType = queryParams.get(PARAMS.MOVIE_TYPE);
+		const movieType = queryParams.get(PARAMS.MOVIE_TYPE);
 
-		if (routeBeforeQueryString === GLOBAL_ROUTES.MOVIE_DETAILS && (!movieId || !movieType))
+		if (
+			routeBeforeQueryString === GLOBAL_ROUTES.MOVIE_DETAILS &&
+			(!movieId || !movieType)
+		)
 			throw new Error(
 				"No movie id or movie type was provided while trying to render movie details page!"
 			);
@@ -34,18 +42,37 @@ const getHashParams = (route_) => {
 
 const handleRouteChange = (router_) => {
 	const { route, params } = getHashParams(router_.route);
-	if (route === GLOBAL_ROUTES.HOME) {
-		router_.renderRoute(homepageTemplate(), hydrateHomepage);
-	} else if (route === GLOBAL_ROUTES.MOVIE_DETAILS) {
-		router_.renderRoute(
-			movieDetailsTemplate(params.movieId, params.movieType),
-			hydrateMovieDetailsPage
-		);
+
+	let template, hydrator;
+
+	switch (route) {
+		case GLOBAL_ROUTES.TV_SHOWS_PAGE:
+			template = tvShowsTemplate();
+			break;
+
+		case GLOBAL_ROUTES.POPULAR_MOVIES:
+			template = popularMoviesTemplate();
+			break;
+
+		case GLOBAL_ROUTES.NEW_MOVIES:
+			template = newMoviesTemplate();
+			break;
+
+		case GLOBAL_ROUTES.MOVIE_DETAILS:
+			[template, hydrator] = [
+				movieDetailsTemplate(),
+				hydrateMovieDetailsPage(params),
+			];
+			break;
+
+		default:
+			[template, hydrator] = [homepageTemplate(), hydrateHomepage];
 	}
+
+	router_.renderRoute(template, hydrator);
 };
 
 // App init call
 handleRouteChange(router);
 
-
-window.addEventListener(router.changeEvent, () => handleRouteChange(router));
+window.addEventListener('hashchange', () => handleRouteChange(router));
