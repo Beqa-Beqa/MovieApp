@@ -1,7 +1,7 @@
 import { getImage } from "../utilities/utilities.js";
 import { MOVIES } from '../enums.js';
 
-export const createMovieCard = (movie, type) => {
+const createMovieCard = (movie, type) => {
 	const containerElement = document.createElement("div");
 	containerElement.classList.add("movie-card");
 
@@ -12,7 +12,7 @@ export const createMovieCard = (movie, type) => {
 		id,
 		release_date,
         name,
-        first_air_date
+        first_air_date,
 	} = movie;
 
 	const backdropUrl = getImage(backdrop_path, 1280);
@@ -36,18 +36,3 @@ export const createMovieCard = (movie, type) => {
 };
 
 export default createMovieCard;
-
-// adult: false
-// backdrop_path: "/m2mzlsJjE3UAqeUB5fLUkpWg4Iq.jpg"
-// genre_ids: Array(2)
-// id: 1165067
-// original_language: "en"
-// original_title: "Cosmic Chaos"
-// overview: "Battles in virtual reality, survival in a post-apocalyptic wasteland, a Soviet spaceship giving a distress signal - Fantastic stories created with advanced special effects and passion."
-// popularity: 575.5696
-// poster_path: "/mClzWv7gBqgXfjZXp49Enyoex1v.jpg"
-// release_date: "2023-08-03"
-// title: "Cosmic Chaos"
-// video: false
-// vote_average: 5.15
-// vote_count: 10

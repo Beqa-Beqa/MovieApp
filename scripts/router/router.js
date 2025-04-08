@@ -2,17 +2,11 @@ export class Router {
 	// Route which is being rendered
 	#route;
 
-	// Element's id in which we render the route
+	// Element in which we render templates
 	#rootRef;
 
 	// Routes data Router class instance will work on
 	#routes;
-
-	// Event to be fired on route change
-	#event;
-
-	// Route change event name
-	#changeEvent = "routeChange";
 
 	/**
 	 *
@@ -23,9 +17,6 @@ export class Router {
 		this.#rootRef = document.getElementById(rootRef);
 		this.#routes = routes;
 		this.#route = window.location.hash || this.#routes.HOME;
-		this.#event = new CustomEvent(this.#changeEvent, {
-			detail: { route: this.#route },
-		});
 	}
 
 	get route() {
@@ -39,27 +30,25 @@ export class Router {
 	 * the new route value otherwise new error is thrown.
 	 */
 	set route(newRoute) {
-		const routeBeforeQueryString = newRoute.split('?')[0];
-		
+		const routeBeforeQueryString = newRoute.split("?")[0];
+
 		if (!Object.values(this.#routes).includes(routeBeforeQueryString)) {
 			throw new Error("Invalid route was provided!");
 		}
 
 		this.#route = newRoute;
-		this.#event.detail.route = newRoute;
 		window.location.hash = newRoute;
-		window.dispatchEvent(this.#event);
 	}
 
-	get changeEvent() {
-		return this.#changeEvent;
+	get rootRef () {
+		return this.#rootRef;
 	}
 
 	/**
 	 * Renders route based on current route state
 	 */
-	async renderRoute(template, hydrator) {
-		this.#rootRef.innerHTML = await template;
+	renderRoute(template, hydrator = () => {}) {
+		this.#rootRef.innerHTML = template;
 		hydrator();
 	}
 }

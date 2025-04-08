@@ -2,14 +2,13 @@
 	--accent-color-fade: #84ffc8;
 	--accent-color-bold: #321450;
 	--image-blur-color: #32145085;
-    --base-border-radius: 5px;
 }
 
 
 *{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
     text-decoration: none;
     font-family: 'Tektur', sans-serif;
 }
