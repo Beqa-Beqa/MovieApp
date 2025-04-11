@@ -51,3 +51,18 @@ export const renderMovies = (movies, container, type) => {
 
 	container.append(fragment);
 };
+
+/**
+ * 
+ * @param {Event} event Dispatched event 
+ * @param {HTMLElement} sectionContainer Container of which background changes
+ */
+export const renderBackdrop = (event, sectionContainer) => {
+	const parentElem = event.target.parentElement;
+	const isCardElem = parentElem.classList.contains("movie-card");
+	if (isCardElem) {
+		const backdropUrl = parentElem.getAttribute("data-backdrop-url");
+		if (backdropUrl !== "null")
+			sectionContainer.style.backgroundImage = `url(${backdropUrl})`;
+	}
+};

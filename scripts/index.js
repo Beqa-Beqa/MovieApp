@@ -67,7 +67,7 @@ const handleRouteChange = (router_) => {
 			break;
 
 		default:
-			[template, hydrator] = [homepageTemplate(), hydrateHomepage];
+			[template, hydrator] = [homepageTemplate(), hydrateHomepage()];
 	}
 
 	router_.renderRoute(template, hydrator);

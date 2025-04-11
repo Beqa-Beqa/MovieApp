@@ -1,6 +1,6 @@
 import { router, movieStorage } from "../init.js";
 import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
-import { renderMovies } from "../utilities/render.js";
+import { renderMovies, renderBackdrop } from "../utilities/render.js";
 import { MOVIES } from "../enums.js";
 
 export const homepageTemplate = () => {
@@ -85,16 +85,6 @@ export const homepageTemplate = () => {
     `;
 };
 
-const renderBackdrop = (event, sectionContainer) => {
-	const parentElem = event.target.parentElement;
-	const isCardElem = parentElem.classList.contains("movie-card");
-	if (isCardElem) {
-		const backdropUrl = parentElem.getAttribute("data-backdrop-url");
-		if (backdropUrl !== "null")
-			sectionContainer.style.backgroundImage = `url(${backdropUrl})`;
-	}
-};
-
 const handleMovieClick = (event, router) => {
 	const cardElem = event.target.closest(".movie-card");
 	if (cardElem) {
@@ -156,4 +146,4 @@ async function initHomepage(router, movieStorage) {
 	renderMovies(tvShows, tvShowsContainer, MOVIES.TV);
 }
 
-export const hydrateHomepage = initHomepage.bind(null, router, movieStorage);
+export const hydrateHomepage = () => () => initHomepage(router, movieStorage);
