@@ -1,10 +1,25 @@
 import { MOVIES } from "../enums.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
 
-const initHeaderNav = (router) => {
+const initHeaderNav = () => {
 	const header = document.querySelector(".header");
 	const headerNavElement = document.querySelector(".header-nav");
 	const overlay = document.querySelector(".overlay");
+
+	// Populate href attributes in header links
+	headerNavElement.querySelectorAll('a').forEach(link => {
+		switch (link.id) {
+			case MOVIES.NEW:
+				link.setAttribute('href', GLOBAL_ROUTES.NEW_MOVIES);
+				break;
+			case MOVIES.POPULAR:
+				link.setAttribute('href', GLOBAL_ROUTES.POPULAR_MOVIES);
+				break;
+			case MOVIES.TV:
+				link.setAttribute('href', GLOBAL_ROUTES.TV_SHOWS_PAGE);
+				break;
+		}
+	})
 
 	header.addEventListener("click", (e) => {
 		const hideBurgerMenu = () => {
@@ -19,24 +34,11 @@ const initHeaderNav = (router) => {
 
 		const elem = e.target;
 
-		let targetRoute;
-
 		switch (elem.id) {
 			case "headerLogo":
-				targetRoute = GLOBAL_ROUTES.HOME;
-				break;
 			case MOVIES.NEW:
-				targetRoute = GLOBAL_ROUTES.NEW_MOVIES;
-				hideBurgerMenu();
-				break;
 			case MOVIES.POPULAR:
-				targetRoute = GLOBAL_ROUTES.POPULAR_MOVIES;
-				hideBurgerMenu();
-				break;
 			case MOVIES.TV:
-				targetRoute = GLOBAL_ROUTES.TV_SHOWS_PAGE;
-				hideBurgerMenu();
-				break;
 			case "burger-menu-close-button":
 			case "overlay":
 				hideBurgerMenu();
@@ -45,8 +47,6 @@ const initHeaderNav = (router) => {
 				showBurgerMenu();
 				break;
 		}
-
-		if (targetRoute) router.route = targetRoute;
 	});
 };
 

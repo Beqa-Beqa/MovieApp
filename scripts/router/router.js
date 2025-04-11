@@ -1,7 +1,4 @@
 export class Router {
-	// Route which is being rendered
-	#route;
-
 	// Element in which we render templates
 	#rootRef;
 
@@ -16,11 +13,10 @@ export class Router {
 	constructor(rootRef, routes) {
 		this.#rootRef = document.getElementById(rootRef);
 		this.#routes = routes;
-		this.#route = window.location.hash || this.#routes.HOME;
 	}
 
 	get route() {
-		return this.#route;
+		return window.location.hash || this.#routes.HOME;
 	}
 
 	/**
@@ -31,24 +27,17 @@ export class Router {
 	 */
 	set route(newRoute) {
 		const routeBeforeQueryString = newRoute.split("?")[0];
-
+		
 		if (!Object.values(this.#routes).includes(routeBeforeQueryString)) {
 			throw new Error("Invalid route was provided!");
 		}
-
-		this.#route = newRoute;
+		
 		window.location.hash = newRoute;
 	}
 
 	get rootRef () {
 		return this.#rootRef;
 	}
-
-
-	syncRouteWithHash() {
-		this.#route = window.location.hash;
-	}
-
 
 	/**
 	 * @param {string} template Template string

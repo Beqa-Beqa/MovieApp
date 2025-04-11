@@ -1,4 +1,4 @@
-import { initNavbar, router } from "./init.js";
+import { router } from "./init.js";
 import { GLOBAL_ROUTES, PARAMS } from "./router/routes.js";
 import { homepageTemplate, hydrateHomepage } from "./views/homepage.js";
 import {
@@ -8,8 +8,9 @@ import {
 import { newMoviesTemplate } from './views/newMovies.js';
 import { popularMoviesTemplate } from './views/popularMovies.js';
 import { tvShowsTemplate } from './views/tvShows.js';
+import { initHeaderNav } from "./components/index.js";
 
-initNavbar();
+initHeaderNav();
 
 const getHashParams = (route_) => {
 	try {
@@ -41,7 +42,6 @@ const getHashParams = (route_) => {
 };
 
 const handleRouteChange = (router_) => {
-	router_.syncRouteWithHash();
 	const { route, params } = getHashParams(router_.route);
 
 	let template, hydrator;
