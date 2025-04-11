@@ -1,4 +1,4 @@
-import { getImage } from "../utilities/utilities.js";
+import { getImage } from "../utilities/api.js";
 import { MOVIES } from '../enums.js';
 
 const createMovieCard = (movie, type) => {

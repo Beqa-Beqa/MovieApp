@@ -4,7 +4,7 @@ import {
 	getImage,
 	getVideoSnippetsById,
 	getVideoYTURL,
-} from "../utilities/utilities.js";
+} from "../utilities/api.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
 import { renderVideoSnippetYT } from "../utilities/render.js";
 import { MOVIES } from "../enums.js";

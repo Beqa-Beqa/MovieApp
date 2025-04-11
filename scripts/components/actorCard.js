@@ -1,4 +1,4 @@
-import { getImage } from "../utilities/utilities.js";
+import { getImage } from "../utilities/api.js";
 
 export const createActorCard = (actorData) => {
 	let { original_name, profile_path } = actorData;

@@ -3,7 +3,7 @@ import {
 	getNewMovies,
 	getPopularMovies,
 	getPopularTVShows,
-} from "../utilities/utilities.js";
+} from "../utilities/api.js";
 import { MOVIES } from '../enums.js';
 
 export class MovieStorage {
