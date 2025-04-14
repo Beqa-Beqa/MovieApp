@@ -8,17 +8,20 @@ const initHeaderNav = () => {
 
 	// Populate href attributes in header links
 	headerNavElement.querySelectorAll('a').forEach(link => {
+		let route;
 		switch (link.id) {
 			case MOVIES.NEW:
-				link.setAttribute('href', GLOBAL_ROUTES.NEW_MOVIES);
+				route = GLOBAL_ROUTES.NEW_MOVIES;
 				break;
 			case MOVIES.POPULAR:
-				link.setAttribute('href', GLOBAL_ROUTES.POPULAR_MOVIES);
+				route = GLOBAL_ROUTES.POPULAR_MOVIES;
 				break;
 			case MOVIES.TV:
-				link.setAttribute('href', GLOBAL_ROUTES.TV_SHOWS_PAGE);
+				route = GLOBAL_ROUTES.TV_SHOWS_PAGE;
 				break;
 		}
+
+		link.setAttribute('href', route);
 	})
 
 	header.addEventListener("click", (e) => {

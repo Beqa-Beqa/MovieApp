@@ -35,3 +35,7 @@
 .px-1 {
     padding: 0 .8rem;
 }
+
+.visibility-visible {
+    visibility: visible !important;
+}

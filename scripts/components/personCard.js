@@ -1,8 +1,9 @@
+import { MAX_NAME_LENGTH } from "../enums.js";
 import { getImage } from "../utilities/api.js";
 
-export const createActorCard = (actorData) => {
+export const createPersonCard = (actorData) => {
 	let { original_name, profile_path } = actorData;
-    if(original_name.length > 10) original_name = original_name.slice(0, 11) + '...';
+    if(original_name.trim().length > MAX_NAME_LENGTH) original_name = original_name.slice(0, MAX_NAME_LENGTH) + '...';
 
 	const actorImage = profile_path ? getImage(profile_path, 185) : './assets/user-placeholder.jpg';
     const cardContainer = document.createElement('div');
@@ -18,4 +19,4 @@ export const createActorCard = (actorData) => {
     return cardContainer;
 };
 
-export default createActorCard;
+export default createPersonCard;

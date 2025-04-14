@@ -5,6 +5,12 @@ export class Router {
 	// Routes data Router class instance will work on
 	#routes;
 
+	// Event that is fired after route render starts
+	// and after route ender ends
+	#event;
+
+	#eventName = "renderStateChange";
+
 	/**
 	 *
 	 * @param {string} rootRef id of the element where routes are rendered at
@@ -13,6 +19,17 @@ export class Router {
 	constructor(rootRef, routes) {
 		this.#rootRef = document.getElementById(rootRef);
 		this.#routes = routes;
+
+		// state = 'loading' || 'loaded'
+		/**
+		 * 
+		 * @param {'loading' | 'loaded'} state state if route is loading or not
+		 * @returns renderStateChange event based on passed state
+		 */
+		this.#event = (state = "loaded") =>
+			new CustomEvent(this.#eventName, {
+				detail: { state },
+			});
 	}
 
 	get route() {
@@ -27,16 +44,26 @@ export class Router {
 	 */
 	set route(newRoute) {
 		const routeBeforeQueryString = newRoute.split("?")[0];
-		
+
 		if (!Object.values(this.#routes).includes(routeBeforeQueryString)) {
 			throw new Error("Invalid route was provided!");
 		}
-		
+
 		window.location.hash = newRoute;
 	}
 
-	get rootRef () {
+	get rootRef() {
 		return this.#rootRef;
+	}
+
+	getEvent() {
+		return {
+			eventName: this.#eventName,
+			eventStates: {
+				LOADED: 'loaded',
+				LOADING: 'loading'
+			}
+		}
 	}
 
 	/**
@@ -44,8 +71,13 @@ export class Router {
 	 * @param {Function} hydrator Template string hydrator
 	 * Renders route based on current route state
 	 */
-	renderRoute(template, hydrator = () => {}) {
+	async renderRoute(template, hydrator = () => {}) {
+		window.dispatchEvent(this.#event('loading'));
+
+
 		this.#rootRef.innerHTML = template;
-		hydrator();
+		await hydrator();
+
+		window.dispatchEvent(this.#event('loaded'));
 	}
 }
