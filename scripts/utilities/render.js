@@ -1,4 +1,4 @@
-import { createMovieCard } from "../components/index.js";
+import { createMovieCard, seeMoreCard } from "../components/index.js";
 
 /**
  *
@@ -33,8 +33,9 @@ export const renderVideoSnippetYT = (elem, url) => {
  * @param {Array<Movies>} movies Array of movies to be rendered
  * @param {HTMLElement} container Container where the elements should be rendered
  * @param {MovieType} type Type of the movies e.g. 'newMovies' | 'popularMovies' | 'tvShows'
+ * @param {Array<MovieIds>} exceptions Movie ids array which should be excluded from rendering
  */
-export const renderMovies = (movies, container, type) => {
+export const renderMovies = (movies, container, type, exceptions=undefined) => {
 	const fragment = document.createDocumentFragment();
 
 	if (!movies.length) {
@@ -46,7 +47,9 @@ export const renderMovies = (movies, container, type) => {
 
 		fragment.append(moviesErrorContainer);
 	} else {
+		movies = exceptions ? movies.filter(movie => !exceptions.includes(movie.id)) : movies;
 		fragment.append(...movies.map((movie) => createMovieCard(movie, type)));
+		fragment.append(seeMoreCard(type));
 	}
 
 	container.append(fragment);
@@ -66,3 +69,31 @@ export const renderBackdrop = (event, sectionContainer) => {
 			sectionContainer.style.backgroundImage = `url(${backdropUrl})`;
 	}
 };
+
+
+/**
+ * Renders loader which is above every element
+ */
+export const renderLoader = () => {
+	const wrapper = document.createElement('div');
+	wrapper.classList.add('loader-wrapper');
+	wrapper.id = "overlay-loader";
+	wrapper.innerHTML = `
+		<div class="three-body">
+			<div class="three-body__dot"></div>
+			<div class="three-body__dot"></div>
+			<div class="three-body__dot"></div>
+		</div>
+	`
+	document.body.append(wrapper);
+}
+
+/**
+ * Cleans already rendered loader
+ */
+export const cleanupLoader = () => {
+	const loader = document.getElementById('overlay-loader');
+	if(loader) loader.remove();
+
+	document.querySelectorAll('body > *:not(#overlay-loader)').forEach(element => element.classList.add('visibility-visible'));
+}

@@ -1,3 +1,3 @@
 export { default as initHeaderNav } from "./navbar.js";
-export { default as createMovieCard } from "./movieCard.js";
-export { default as createActorCard } from "./actorCard.js";
+export { createMovieCard, seeMoreCard } from "./movieCard.js";
+export { default as createPersonCard } from "./personCard.js";

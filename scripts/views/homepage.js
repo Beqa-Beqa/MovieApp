@@ -1,6 +1,6 @@
 import { router, movieStorage } from "../init.js";
 import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
-import { renderMovies, renderBackdrop } from "../utilities/render.js";
+import { renderMovies, renderBackdrop, renderLoader, cleanupLoader } from "../utilities/render.js";
 import { MOVIES } from "../enums.js";
 
 export const homepageTemplate = () => {
@@ -41,7 +41,7 @@ export const homepageTemplate = () => {
 	<section class="movies-section" id="new-movies-section-container">
 		<div class="movies container">
 			<div class="movies-section-title">
-				<h2>New Movies</h2>
+				<a href=${GLOBAL_ROUTES.NEW_MOVIES} class="title">New Movies</a>
 			</div>
 
 			<div id="new-movies-container" class="movie-cards-container">
@@ -56,7 +56,7 @@ export const homepageTemplate = () => {
 	<section class="movies-section" id="popular-movies-section-container">
 		<div class="movies container">
 			<div class="movies-section-title">
-				<h2>Popular Movies</h2>
+				<a href=${GLOBAL_ROUTES.POPULAR_MOVIES} class="title">Popular Movies</a>
 			</div>
 
 			<div id="popular-movies-container" class="movie-cards-container">
@@ -71,7 +71,7 @@ export const homepageTemplate = () => {
 	<section class="movies-section" id="tv-shows-section-container">
 		<div class="movies container">
 			<div class="movies-section-title">
-				<h2>TV-shows</h2>
+				<a href=${GLOBAL_ROUTES.TV_SHOWS_PAGE} class="title">TV-shows</a>
 			</div>
 
 			<div id="tv-shows-container" class="movie-cards-container">
@@ -90,7 +90,12 @@ const handleMovieClick = (event, router) => {
 	if (cardElem) {
 		const movieId = parseInt(cardElem.getAttribute("data-movie-id"));
 		const movieType = cardElem.getAttribute("data-movie-type");
-		router.route = `${GLOBAL_ROUTES.MOVIE_DETAILS}?${PARAMS.MOVIE_ID}=${movieId}&${PARAMS.MOVIE_TYPE}=${movieType}`;
+
+		// See more cards are also counted as movie card element
+		// But they don't have movieId and movieType
+		if(movieId && movieType) {
+			router.route = `${GLOBAL_ROUTES.MOVIE_DETAILS}?${PARAMS.MOVIE_ID}=${movieId}&${PARAMS.MOVIE_TYPE}=${movieType}`;
+		}
 	}
 };
 
@@ -146,4 +151,4 @@ async function initHomepage(router, movieStorage) {
 	renderMovies(tvShows, tvShowsContainer, MOVIES.TV);
 }
 
-export const hydrateHomepage = () => () => initHomepage(router, movieStorage);
+export const hydrateHomepage = () => async () => await initHomepage(router, movieStorage);

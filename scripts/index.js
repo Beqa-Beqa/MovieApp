@@ -9,8 +9,9 @@ import { newMoviesTemplate } from './views/newMovies.js';
 import { popularMoviesTemplate } from './views/popularMovies.js';
 import { tvShowsTemplate } from './views/tvShows.js';
 import { initHeaderNav } from "./components/index.js";
+import { cleanupLoader, renderLoader } from "./utilities/render.js";
 
-initHeaderNav();
+renderLoader();
 
 const getHashParams = (route_) => {
 	try {
@@ -73,7 +74,18 @@ const handleRouteChange = (router_) => {
 	router_.renderRoute(template, hydrator);
 };
 
-// App init call
+
+// App initialization
+// Manual start is needed at first, because hashchange is not fired on load.
+initHeaderNav();
 handleRouteChange(router);
 
 window.addEventListener('hashchange', () => handleRouteChange(router));
+
+
+const routerRenderEvent = router.getEvent();
+window.addEventListener(routerRenderEvent.eventName, (e) => {
+	e.detail.state === routerRenderEvent.eventStates.LOADING ? renderLoader()
+	: e.detail.state === routerRenderEvent.eventStates.LOADED ? cleanupLoader()
+	: null;
+});

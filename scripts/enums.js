@@ -1,8 +1,4 @@
-// Enum for API
-export const GENDERS_ENUM = {
-	FEMALE: 1,
-	MALE: 2,
-};
+export const MAX_NAME_LENGTH = 11;
 
 export const MOVIES = {
 	NEW: "newMovies",

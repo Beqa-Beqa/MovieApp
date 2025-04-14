@@ -6,9 +6,9 @@ import {
 	getVideoYTURL,
 } from "../utilities/api.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
-import { renderVideoSnippetYT } from "../utilities/render.js";
+import { renderMovies, renderVideoSnippetYT } from "../utilities/render.js";
 import { MOVIES } from "../enums.js";
-import { createActorCard } from "../components/index.js";
+import { createPersonCard } from "../components/index.js";
 
 export const movieDetailsTemplate = (movieData = {}) => {
 	return `
@@ -31,6 +31,10 @@ export const movieDetailsTemplate = (movieData = {}) => {
                             <span>Cast:</span>
                             <div class="movie-actors-container"><!-- Actor cards here --></div>
                         </div>
+                        <div class="movie-details-description-group group-vertical movie-directors-container-wrapper">
+                            <span>Directed By:</span>
+                            <div class="movie-actors-container"><!-- Actor cards here --></div>
+                        </div>
                     </div>
                 </div>
 
@@ -47,7 +51,7 @@ export const movieDetailsTemplate = (movieData = {}) => {
             <div class="movies-section" id="suggested-section-container">
                 <div class="movies container">
                     <div class="movies-section-title">
-                        <h2>Other suggested movies</h2>
+                        <a class="title" href=${movieData.routeToRedirect}>Other suggested movies</h2>
                     </div>
         
                     <div class="movie-cards-container"><!-- Movies go here --></div>
@@ -58,14 +62,22 @@ export const movieDetailsTemplate = (movieData = {}) => {
 };
 
 async function initMovieDetailsPage(router, movieStorage, params) {
-	if (!params.movieId || !params.movieType) router.route = GLOBAL_ROUTES.HOME;
+	if (!params.movieId || !params.movieType) {
+		router.route = GLOBAL_ROUTES.HOME;
+		// End loading state here ...
+	}
 
 	const movie = await movieStorage.getMovieById(
 		params.movieId,
 		params.movieType
 	);
 
-	const { cast, _ } = await getCreditsByMovieId(movie.id, params.movieType === MOVIES.TV ? "tv" : "movie");
+	const { cast, crew } = await getCreditsByMovieId(
+		movie.id,
+		params.movieType === MOVIES.TV ? "tv" : "movie"
+	);
+
+	const directedBy = crew.filter(member => member.job === 'Director');
 
 	const movieData = {
 		imgUrl: movie.poster_path
@@ -83,15 +95,40 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 		trailers: (
 			await getVideoSnippetsById(movie.id, params.movieType === MOVIES.TV)
 		).data?.results.filter((snippet) => snippet.type === "Trailer"),
-		cast: cast.length ? cast : null
+		cast: cast.length ? cast : null,
 	};
 
-	router.renderRoute(movieDetailsTemplate(movieData));
+	let moviesToSuggest;
+	let routeToRedirect;
+	switch (params.movieType) {
+		case MOVIES.NEW:
+			moviesToSuggest = await movieStorage.getNewMovies(1);
+			routeToRedirect = GLOBAL_ROUTES.NEW_MOVIES;
+			break;
+		case MOVIES.POPULAR:
+			moviesToSuggest = await movieStorage.getPopularMovies(1);
+			routeToRedirect = GLOBAL_ROUTES.POPULAR_MOVIES;
+			break;
+		case MOVIES.TV:
+			moviesToSuggest = await movieStorage.getTvShows(1);
+			routeToRedirect = GLOBAL_ROUTES.TV_SHOWS_PAGE;
+			break;
+	}
 
+	movieData.routeToRedirect = routeToRedirect;
+
+	// RERENDER HAPPENS HERE ---------------------------------------------------------
+	// -------------------------------------------------------------------------------
+	router.renderRoute(movieDetailsTemplate(movieData));
+	// After this line everything is rerenderd -----------------------------------------
+	// -------------------------------------------------------------------------------
+
+	const trailersContainer = router.rootRef.querySelector(".trailers-container-media");
+	const actorsContainer = router.rootRef.querySelector(".movie-actors-container");
+	const directorsContainer = router.rootRef.querySelector('.movie-directors-container-wrapper');
+	const moviesContainer = router.rootRef.querySelector(".movie-cards-container");
+	
 	if (Array.isArray(movieData.trailers) && movieData.trailers.length) {
-		const container = router.rootRef.querySelector(
-			".trailers-container-media"
-		);
 		const fragment = document.createDocumentFragment();
 
 		movieData.trailers.forEach((trailer) => {
@@ -102,24 +139,30 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 			fragment.append(trailerDiv);
 		});
 
-		container.appendChild(fragment);
+		trailersContainer.appendChild(fragment);
 	} else {
-		router.rootRef.querySelector(".trailers-container").remove();
+		trailersContainer.remove();
 	}
 
 	if (Array.isArray(cast) && cast.length) {
-		const container = router.rootRef.querySelector(
-			".movie-actors-container"
-		);
 		const fragment = document.createDocumentFragment();
-
-		cast.forEach((actor) => fragment.append(createActorCard(actor)));
-		container.append(fragment);
+		cast.forEach(actor => fragment.append(createPersonCard(actor)));
+		actorsContainer.append(fragment);
 	} else {
-		router.rootRef
-			.querySelector(".movie-actors-container-wrapper")
-			.remove();
+		actorsContainer.remove();
 	}
+
+	if(Array.isArray(directedBy) && directedBy.length) {
+		const fragment = document.createDocumentFragment();
+		directedBy.forEach(director => fragment.append(createPersonCard(director)));
+		directorsContainer.append(fragment);
+	} else {
+		directorsContainer.remove();
+	}
+
+
+	// moviesToSuggest is defined above in switch case
+	renderMovies(moviesToSuggest, moviesContainer, params.movieType, [movie.id]);
 }
 
 export const hydrateMovieDetailsPage = (params) => async () =>

@@ -1,7 +1,8 @@
 import { getImage } from "../utilities/api.js";
 import { MOVIES } from '../enums.js';
+import { GLOBAL_ROUTES } from "../router/routes.js";
 
-const createMovieCard = (movie, type) => {
+export const createMovieCard = (movie, type) => {
 	const containerElement = document.createElement("div");
 	containerElement.classList.add("movie-card");
 
@@ -35,4 +36,33 @@ const createMovieCard = (movie, type) => {
 	return containerElement;
 };
 
-export default createMovieCard;
+export const seeMoreCard = (type) => {
+	const containerElement = document.createElement("a");
+
+	let link;
+
+	switch(type) {
+		case MOVIES.NEW:
+			link = GLOBAL_ROUTES.NEW_MOVIES;
+			break;
+		case MOVIES.POPULAR:
+			link = GLOBAL_ROUTES.POPULAR_MOVIES;
+			break;
+		case MOVIES.TV:
+			link = GLOBAL_ROUTES.TV_SHOWS_PAGE;
+			break;
+	}
+
+	containerElement.setAttribute('href', `${link ?? "#"}`);
+	containerElement.classList.add("movie-card");
+
+	const innerContent = `
+		<div class="movie-card-description">
+			<h3>See More</h3>
+		</div>
+	`;
+
+	containerElement.innerHTML = innerContent;
+
+	return containerElement;
+}
