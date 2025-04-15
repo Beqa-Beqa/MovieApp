@@ -9,7 +9,8 @@ export class Router {
 	// and after route ender ends
 	#event;
 
-	#eventName = "renderStateChange";
+
+	#eventName = "routeStateChange";
 
 	/**
 	 *

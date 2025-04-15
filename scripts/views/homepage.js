@@ -1,6 +1,7 @@
 import { router, movieStorage } from "../init.js";
-import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
-import { renderMovies, renderBackdrop, renderLoader, cleanupLoader } from "../utilities/render.js";
+import { GLOBAL_ROUTES } from "../router/routes.js";
+import { renderMovies, renderBackdrop} from "../utilities/render.js";
+import { handleMovieClick } from "../utilities/general.js";
 import { MOVIES } from "../enums.js";
 
 export const homepageTemplate = () => {
@@ -83,20 +84,6 @@ export const homepageTemplate = () => {
 	<div class="overlay"></div>
 			
     `;
-};
-
-const handleMovieClick = (event, router) => {
-	const cardElem = event.target.closest(".movie-card");
-	if (cardElem) {
-		const movieId = parseInt(cardElem.getAttribute("data-movie-id"));
-		const movieType = cardElem.getAttribute("data-movie-type");
-
-		// See more cards are also counted as movie card element
-		// But they don't have movieId and movieType
-		if(movieId && movieType) {
-			router.route = `${GLOBAL_ROUTES.MOVIE_DETAILS}?${PARAMS.MOVIE_ID}=${movieId}&${PARAMS.MOVIE_TYPE}=${movieType}`;
-		}
-	}
 };
 
 async function initHomepage(router, movieStorage) {
