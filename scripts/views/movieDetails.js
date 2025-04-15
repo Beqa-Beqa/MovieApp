@@ -6,9 +6,14 @@ import {
 	getVideoYTURL,
 } from "../utilities/api.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
-import { renderMovies, renderVideoSnippetYT } from "../utilities/render.js";
+import {
+	renderBackdrop,
+	renderMovies,
+	renderVideoSnippetYT,
+} from "../utilities/render.js";
 import { MOVIES } from "../enums.js";
 import { createPersonCard } from "../components/index.js";
+import { handleMovieClick } from "../utilities/general.js";
 
 export const movieDetailsTemplate = (movieData = {}) => {
 	return `
@@ -29,11 +34,11 @@ export const movieDetailsTemplate = (movieData = {}) => {
                         </div>
                         <div class="movie-details-description-group group-vertical movie-actors-container-wrapper">
                             <span>Cast:</span>
-                            <div class="movie-actors-container"><!-- Actor cards here --></div>
+                            <div class="movie-people-container actors"><!-- Actor cards here --></div>
                         </div>
                         <div class="movie-details-description-group group-vertical movie-directors-container-wrapper">
                             <span>Directed By:</span>
-                            <div class="movie-actors-container"><!-- Actor cards here --></div>
+                            <div class="movie-people-container directors"><!-- Director cards here --></div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +56,7 @@ export const movieDetailsTemplate = (movieData = {}) => {
             <div class="movies-section" id="suggested-section-container">
                 <div class="movies container">
                     <div class="movies-section-title">
-                        <a class="title" href=${movieData.routeToRedirect}>Other suggested movies</h2>
+                        <a class="title" href=${movieData.routeToRedirect}>Other suggested movies</a>
                     </div>
         
                     <div class="movie-cards-container"><!-- Movies go here --></div>
@@ -77,7 +82,7 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 		params.movieType === MOVIES.TV ? "tv" : "movie"
 	);
 
-	const directedBy = crew.filter(member => member.job === 'Director');
+	const directedBy = crew.filter((member) => member.job === "Director");
 
 	const movieData = {
 		imgUrl: movie.poster_path
@@ -123,11 +128,20 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 	// After this line everything is rerenderd -----------------------------------------
 	// -------------------------------------------------------------------------------
 
-	const trailersContainer = router.rootRef.querySelector(".trailers-container-media");
-	const actorsContainer = router.rootRef.querySelector(".movie-actors-container");
-	const directorsContainer = router.rootRef.querySelector('.movie-directors-container-wrapper');
-	const moviesContainer = router.rootRef.querySelector(".movie-cards-container");
-	
+	const trailersContainer = router.rootRef.querySelector(
+		".trailers-container-media"
+	);
+	const actorsContainer = router.rootRef.querySelector(
+		".movie-people-container.actors"
+	);
+	const directorsContainer = router.rootRef.querySelector(
+		".movie-people-container.directors"
+	);
+	const moviesContainer = router.rootRef.querySelector(
+		".movie-cards-container"
+	);
+	const moviesSection = router.rootRef.querySelector(".movies-section");
+
 	if (Array.isArray(movieData.trailers) && movieData.trailers.length) {
 		const fragment = document.createDocumentFragment();
 
@@ -146,23 +160,32 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 
 	if (Array.isArray(cast) && cast.length) {
 		const fragment = document.createDocumentFragment();
-		cast.forEach(actor => fragment.append(createPersonCard(actor)));
+		cast.forEach((actor) => fragment.append(createPersonCard(actor)));
 		actorsContainer.append(fragment);
 	} else {
 		actorsContainer.remove();
 	}
 
-	if(Array.isArray(directedBy) && directedBy.length) {
+	if (Array.isArray(directedBy) && directedBy.length) {
 		const fragment = document.createDocumentFragment();
-		directedBy.forEach(director => fragment.append(createPersonCard(director)));
+		directedBy.forEach((director) =>
+			fragment.append(createPersonCard(director))
+		);
 		directorsContainer.append(fragment);
 	} else {
 		directorsContainer.remove();
 	}
 
-
 	// moviesToSuggest is defined above in switch case
-	renderMovies(moviesToSuggest, moviesContainer, params.movieType, [movie.id]);
+	renderMovies(moviesToSuggest, moviesContainer, params.movieType, [
+		movie.id,
+	]);
+	moviesContainer.addEventListener("click", (e) => {
+		handleMovieClick(e, router);
+	});
+	moviesContainer.addEventListener("mouseover", (e) => {
+		renderBackdrop(e, moviesSection);
+	});
 }
 
 export const hydrateMovieDetailsPage = (params) => async () =>

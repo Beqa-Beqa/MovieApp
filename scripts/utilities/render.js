@@ -37,7 +37,7 @@ export const renderVideoSnippetYT = (elem, url) => {
  */
 export const renderMovies = (movies, container, type, exceptions=undefined) => {
 	const fragment = document.createDocumentFragment();
-
+	
 	if (!movies.length) {
 		const moviesErrorContainer = document.createElement("div");
 		moviesErrorContainer.classList.add("movies-error-container");
@@ -47,7 +47,7 @@ export const renderMovies = (movies, container, type, exceptions=undefined) => {
 
 		fragment.append(moviesErrorContainer);
 	} else {
-		movies = exceptions ? movies.filter(movie => !exceptions.includes(movie.id)) : movies;
+		if(exceptions && exceptions.length) movies = movies.filter(movie => !exceptions.includes(movie.id));
 		fragment.append(...movies.map((movie) => createMovieCard(movie, type)));
 		fragment.append(seeMoreCard(type));
 	}
