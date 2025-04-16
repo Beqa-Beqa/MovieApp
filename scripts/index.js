@@ -13,6 +13,7 @@ import {
 import { tvShowsTemplate, hydrateTvShowsPage } from "./views/tvShows.js";
 import { initHeaderNav } from "./components/index.js";
 import { cleanupLoader, renderLoader } from "./utilities/render.js";
+import { notFoundTemplate, hydrateNotFoundPage } from "./views/404.js";
 
 renderLoader();
 
@@ -82,7 +83,7 @@ const handleRouteChange = (router_) => {
 			break;
 
 		default:
-			// pass
+			[template, hydrator] = [notFoundTemplate(), hydrateNotFoundPage()];
 			break;
 	}
 

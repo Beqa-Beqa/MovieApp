@@ -5,7 +5,7 @@ import {
 	getVideoSnippetsById,
 	getVideoYTURL,
 } from "../utilities/api.js";
-import { GLOBAL_ROUTES } from "../router/routes.js";
+import { GLOBAL_ROUTES, NOT_FOUND } from "../router/routes.js";
 import {
 	renderBackdrop,
 	renderMovies,
@@ -76,7 +76,7 @@ export const movieDetailsTemplate = (movieData = {}) => {
  * @param {params} params Parameters received in url hash
  */
 async function initMovieDetailsPage(router, movieStorage, params) {
-	if (!params.movieId || !params.movieType) router.route = GLOBAL_ROUTES.HOME;
+	if (!params.movieId || !params.movieType) router.route = NOT_FOUND;
 
 	const movie = await movieStorage.getMovieById(
 		params.movieId,
@@ -116,10 +116,12 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 			moviesToSuggest = await movieStorage.getNewMovies({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.NEW_MOVIES;
 			break;
+			
 		case MOVIES.POPULAR:
 			moviesToSuggest = await movieStorage.getPopularMovies({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.POPULAR_MOVIES;
 			break;
+
 		case MOVIES.TV:
 			moviesToSuggest = await movieStorage.getTvShows({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.TV_SHOWS_PAGE;

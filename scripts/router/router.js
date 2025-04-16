@@ -92,7 +92,7 @@ export class Router {
 			});
 		} catch (e) {
 			console.error(`Something went wrong while rendering route. ${e}`);
-			this.route = this.#routes.DEFAULT;
+			this.route = NOT_FOUND;
 		} finally {
 			window.dispatchEvent(this.#event(EVENT_STATES.LOADED));
 		}
