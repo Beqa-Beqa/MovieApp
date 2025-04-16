@@ -14,6 +14,8 @@ import {
 import { MOVIES } from "../enums.js";
 import { createPersonCard } from "../components/index.js";
 import { handleMovieClick } from "../utilities/general.js";
+import { Router } from "../router/router.js";
+import { MovieStorage } from "../store/storage.js";
 
 export const movieDetailsTemplate = (movieData = {}) => {
 	return `
@@ -66,11 +68,15 @@ export const movieDetailsTemplate = (movieData = {}) => {
 	`;
 };
 
+
+/**
+ * 
+ * @param {Router} router Route class instance
+ * @param {MovieStorage} movieStorage MovieStorage class instance
+ * @param {params} params Parameters received in url hash
+ */
 async function initMovieDetailsPage(router, movieStorage, params) {
-	if (!params.movieId || !params.movieType) {
-		router.route = GLOBAL_ROUTES.HOME;
-		// End loading state here ...
-	}
+	if (!params.movieId || !params.movieType) router.route = GLOBAL_ROUTES.HOME;
 
 	const movie = await movieStorage.getMovieById(
 		params.movieId,
@@ -107,15 +113,15 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 	let routeToRedirect;
 	switch (params.movieType) {
 		case MOVIES.NEW:
-			moviesToSuggest = await movieStorage.getNewMovies(1);
+			moviesToSuggest = await movieStorage.getNewMovies({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.NEW_MOVIES;
 			break;
 		case MOVIES.POPULAR:
-			moviesToSuggest = await movieStorage.getPopularMovies(1);
+			moviesToSuggest = await movieStorage.getPopularMovies({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.POPULAR_MOVIES;
 			break;
 		case MOVIES.TV:
-			moviesToSuggest = await movieStorage.getTvShows(1);
+			moviesToSuggest = await movieStorage.getTvShows({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.TV_SHOWS_PAGE;
 			break;
 	}
@@ -155,7 +161,9 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 
 		trailersContainer.appendChild(fragment);
 	} else {
-		trailersContainer.remove();
+		// Trailers container is actual container where trailers are kept
+		// title "Trailers" are kept in parent element
+		trailersContainer.parentElement.remove();
 	}
 
 	if (Array.isArray(cast) && cast.length) {
@@ -163,7 +171,9 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 		cast.forEach((actor) => fragment.append(createPersonCard(actor)));
 		actorsContainer.append(fragment);
 	} else {
-		actorsContainer.remove();
+		// actors container contains cards of actors.
+		// title "Cast" is contained in parent element.
+		actorsContainer.parentElement.remove();
 	}
 
 	if (Array.isArray(directedBy) && directedBy.length) {
@@ -173,7 +183,9 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 		);
 		directorsContainer.append(fragment);
 	} else {
-		directorsContainer.remove();
+		// Directors container contains cards of directors.
+		// title "Directed By" is containet in parent element
+		directorsContainer.parentElement.remove();
 	}
 
 	// moviesToSuggest is defined above in switch case

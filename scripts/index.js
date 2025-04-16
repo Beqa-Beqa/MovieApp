@@ -1,13 +1,16 @@
 import { router } from "./init.js";
-import { GLOBAL_ROUTES, PARAMS } from "./router/routes.js";
+import { EVENT_STATES, GLOBAL_ROUTES, PARAMS } from "./router/routes.js";
 import { homepageTemplate, hydrateHomepage } from "./views/homepage.js";
 import {
 	movieDetailsTemplate,
 	hydrateMovieDetailsPage,
 } from "./views/movieDetails.js";
-import { newMoviesTemplate } from './views/newMovies.js';
-import { popularMoviesTemplate } from './views/popularMovies.js';
-import { tvShowsTemplate } from './views/tvShows.js';
+import { newMoviesTemplate, hydrateNewMoviesPage } from "./views/newMovies.js";
+import {
+	popularMoviesTemplate,
+	hydratePopularMoviesPage,
+} from "./views/popularMovies.js";
+import { tvShowsTemplate, hydrateTvShowsPage } from "./views/tvShows.js";
 import { initHeaderNav } from "./components/index.js";
 import { cleanupLoader, renderLoader } from "./utilities/render.js";
 
@@ -48,16 +51,27 @@ const handleRouteChange = (router_) => {
 	let template, hydrator;
 
 	switch (route) {
+		case GLOBAL_ROUTES.DEFAULT:
+		case GLOBAL_ROUTES.HOME:
+			[template, hydrator] = [homepageTemplate(), hydrateHomepage()];
+			break;
+
 		case GLOBAL_ROUTES.TV_SHOWS_PAGE:
-			template = tvShowsTemplate();
+			[template, hydrator] = [tvShowsTemplate(), hydrateTvShowsPage()];
 			break;
 
 		case GLOBAL_ROUTES.POPULAR_MOVIES:
-			template = popularMoviesTemplate();
+			[template, hydrator] = [
+				popularMoviesTemplate(),
+				hydratePopularMoviesPage(),
+			];
 			break;
 
 		case GLOBAL_ROUTES.NEW_MOVIES:
-			template = newMoviesTemplate();
+			[template, hydrator] = [
+				newMoviesTemplate(),
+				hydrateNewMoviesPage(),
+			];
 			break;
 
 		case GLOBAL_ROUTES.MOVIE_DETAILS:
@@ -68,24 +82,26 @@ const handleRouteChange = (router_) => {
 			break;
 
 		default:
-			[template, hydrator] = [homepageTemplate(), hydrateHomepage()];
+			// pass
+			break;
 	}
 
 	router_.renderRoute(template, hydrator);
 };
-
 
 // App initialization
 // Manual start is needed at first, because hashchange is not fired on load.
 initHeaderNav();
 handleRouteChange(router);
 
-window.addEventListener('hashchange', () => handleRouteChange(router));
+window.addEventListener("hashchange", () => handleRouteChange(router));
 
+const routeLoadHandler = (loadState) => {
+	loadState === EVENT_STATES.LOADING
+		? renderLoader()
+		: loadState === EVENT_STATES.LOADED
+		? cleanupLoader()
+		: null;
+};
 
-const routerRenderEvent = router.getEvent();
-window.addEventListener(routerRenderEvent.eventName, (e) => {
-	e.detail.state === routerRenderEvent.eventStates.LOADING ? renderLoader()
-	: e.detail.state === routerRenderEvent.eventStates.LOADED ? cleanupLoader()
-	: null;
-});
+router.addRouteChangeListener(routeLoadHandler);

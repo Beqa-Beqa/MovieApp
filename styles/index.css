@@ -328,7 +328,7 @@ header{
 
 }
 
-.new-movies-title{
+.movies-title{
     font-size: 1.7rem;
     width: max-content;
     background-color: var(--accent-color-fade);
@@ -487,8 +487,8 @@ body:has(.loader-wrapper) {
 
 
 
-/* new movies page  */
-.new-movies-page{
+/* movies page  */
+.movies-page{
     padding-top: 30px;
     display: flex;
     flex-direction: column;
@@ -498,7 +498,7 @@ body:has(.loader-wrapper) {
 }
 
 
-.new-movies-page-cards{
+.movies-page-cards{
     display: flex;
     gap: 30px;
     justify-content: space-between;
