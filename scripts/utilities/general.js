@@ -20,7 +20,6 @@ export const handleMovieClick = (event, router) => {
 	}
 };
 
-
 /**
  * 
  * @param {HTMLElement} triggerElement HTMLElement which is observed - action will be activated before 1000px from that element
