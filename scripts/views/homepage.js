@@ -3,6 +3,8 @@ import { GLOBAL_ROUTES } from "../router/routes.js";
 import { renderMovies, renderBackdrop} from "../utilities/render.js";
 import { handleMovieClick } from "../utilities/general.js";
 import { MOVIES } from "../enums.js";
+import { Router } from "../router/router.js";
+import { MovieStorage } from "../store/storage.js";
 
 export const homepageTemplate = () => {
 	return `
@@ -45,9 +47,7 @@ export const homepageTemplate = () => {
 				<a href=${GLOBAL_ROUTES.NEW_MOVIES} class="title">New Movies</a>
 			</div>
 
-			<div id="new-movies-container" class="movie-cards-container">
-
-			</div>
+			<div id="new-movies-container" class="movie-cards-container"><!-- New movies go here --></div>
 		</div>
 	</section>
 
@@ -60,9 +60,7 @@ export const homepageTemplate = () => {
 				<a href=${GLOBAL_ROUTES.POPULAR_MOVIES} class="title">Popular Movies</a>
 			</div>
 
-			<div id="popular-movies-container" class="movie-cards-container">
-				
-			</div>
+			<div id="popular-movies-container" class="movie-cards-container"><!-- Popular movies go here --></div>
 		</div>
 	</section>
 
@@ -75,9 +73,7 @@ export const homepageTemplate = () => {
 				<a href=${GLOBAL_ROUTES.TV_SHOWS_PAGE} class="title">TV-shows</a>
 			</div>
 
-			<div id="tv-shows-container" class="movie-cards-container">
-				
-			</div>
+			<div id="tv-shows-container" class="movie-cards-container"><!-- Tv shows go here --></div>
 		</div>
 	</section>
 
@@ -86,11 +82,16 @@ export const homepageTemplate = () => {
     `;
 };
 
+/**
+ * 
+ * @param {Router} router Router class instnace
+ * @param {MovieStorage} movieStorage MovieStorage class instance
+ */
 async function initHomepage(router, movieStorage) {
 	const [newMovies, popularMovies, tvShows] = await Promise.all([
-		movieStorage.getNewMovies(1),
-		movieStorage.getPopularMovies(1),
-		movieStorage.getTvShows(1),
+		movieStorage.getNewMovies({ page: 1 }),
+		movieStorage.getPopularMovies({ page: 1 }),
+		movieStorage.getTvShows({ page: 1 }),
 	]);
 
 	const rootElement = router.rootRef;

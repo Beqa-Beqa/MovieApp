@@ -19,3 +19,28 @@ export const handleMovieClick = (event, router) => {
 		}
 	}
 };
+
+/**
+ * 
+ * @param {HTMLElement} triggerElement HTMLElement which is observed - action will be activated before 1000px from that element
+ * @param {Function} action Action to perform when trigger activates
+ */
+export const watchInfiniteScroll = (triggerElement, action) => {
+	const scrollObserver = new IntersectionObserver(async (entries) => {
+		// Get first element from array and assign it to "entry"
+		const [entry] = entries;
+
+		if(entry.isIntersecting) {	
+			await action();
+		}
+	}, {
+		rootMargin: '1000px',
+		threshold: 0
+	});
+
+	// Observes our scroll detector element
+	scrollObserver.observe(triggerElement);
+
+	// Returns cleanup function
+	return () => scrollObserver.unobserve(triggerElement);
+}

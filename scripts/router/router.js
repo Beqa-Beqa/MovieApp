@@ -1,3 +1,5 @@
+import { EVENT_STATES, NOT_FOUND } from "./routes.js";
+
 export class Router {
 	// Element in which we render templates
 	#rootRef;
@@ -5,7 +7,8 @@ export class Router {
 	// Routes data Router class instance will work on
 	#routes;
 
-	// Event that is fired after route render starts
+	// Event data that contains
+	// event that is fired after route render starts
 	// and after route ender ends
 	#event;
 
@@ -27,10 +30,10 @@ export class Router {
 		 * @param {'loading' | 'loaded'} state state if route is loading or not
 		 * @returns renderStateChange event based on passed state
 		 */
-		this.#event = (state = "loaded") =>
+		this.#event = (state = EVENT_STATES.LOADED) =>
 			new CustomEvent(this.#eventName, {
 				detail: { state },
-			});
+			})
 	}
 
 	get route() {
@@ -44,27 +47,32 @@ export class Router {
 	 * the new route value otherwise new error is thrown.
 	 */
 	set route(newRoute) {
-		const routeBeforeQueryString = newRoute.split("?")[0];
+		try {
 
-		if (!Object.values(this.#routes).includes(routeBeforeQueryString)) {
-			throw new Error("Invalid route was provided!");
+			const routeBeforeQueryString = newRoute.split("?")[0];
+			
+			if (!Object.values(this.#routes).includes(routeBeforeQueryString)) {
+				throw new Error("Invalid route was provided!");
+			}
+			
+			window.location.hash = newRoute;
+		} catch (e) {
+			console.error(`Something went wrong while changing routes: ${e}`);
+			window.location.hash = NOT_FOUND;
 		}
-
-		window.location.hash = newRoute;
 	}
 
 	get rootRef() {
 		return this.#rootRef;
 	}
 
-	getEvent() {
-		return {
-			eventName: this.#eventName,
-			eventStates: {
-				LOADED: 'loaded',
-				LOADING: 'loading'
-			}
-		}
+	/**
+	 * 
+	 * @param {Function} cb Listener
+	 */
+	addRouteChangeListener(cb) {
+		const handler = (e) => cb(e.detail.state);
+		window.addEventListener(this.#eventName, handler);
 	}
 
 	/**
@@ -73,12 +81,20 @@ export class Router {
 	 * Renders route based on current route state
 	 */
 	async renderRoute(template, hydrator = () => {}) {
-		window.dispatchEvent(this.#event('loading'));
+		window.dispatchEvent(this.#event(EVENT_STATES.LOADING));
+		try {
+			this.#rootRef.innerHTML = template;
+			await hydrator();
 
-
-		this.#rootRef.innerHTML = template;
-		await hydrator();
-
-		window.dispatchEvent(this.#event('loaded'));
+			window.scrollTo({
+				top: 0,
+				left: 0
+			});
+		} catch (e) {
+			console.error(`Something went wrong while rendering route. ${e}`);
+			this.route = this.#routes.DEFAULT;
+		} finally {
+			window.dispatchEvent(this.#event(EVENT_STATES.LOADED));
+		}
 	}
 }
