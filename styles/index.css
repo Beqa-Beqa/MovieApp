@@ -506,6 +506,52 @@ body:has(.loader-wrapper) {
     align-items: center;
 }
 
+
+/* Not found ------------ */
+
+.not-found-container {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-found-container-inner {
+    /* Temporary */
+    visibility: visible;
+    /* --------- */
+    max-width: 600px;
+    max-height: 600px;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: 5px double var(--error);
+    padding: 2rem;
+}
+
+.not-found-container-inner p {
+    font-size: 4rem;
+}
+
+.not-found-container-inner a {
+    display: inline-block;
+    margin-top: 1rem;
+    border: 3px solid var(--accent-color-bold);
+    padding: 1rem .5rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--accent-color-bold);
+    transition: .2s;
+}
+
+.not-found-container-inner a:hover {
+    background-color: var(--accent-color-bold);
+    color: snow;
+}
+
+/* ---------------------- */
    
 @keyframes spin78236 {
     0% {
