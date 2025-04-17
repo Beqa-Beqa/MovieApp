@@ -19,7 +19,64 @@ export const homepageTemplate = () => {
 					placeholder="Search for Movies, Series or People"
 				/>
 				<i class="bx bx-search"></i>
+
+				<div class="searching">
+				<div class="search-card">
+					<div class="search-image">
+						<img src='../assets/background.jpg' alt=''>
+					</div>
+
+					<div class="search-text">
+						<h2>Title</h2>
+					</div>
+				</div>
+
+					<div class="search-card">
+					<div class="search-image">
+						<img src='../assets/background.jpg' alt=''>
+					</div>
+
+					<div class="search-text">
+						<h1>Title</h1>
+					</div>
+				</div>
+
+
+					<div class="search-card">
+					<div class="search-image">
+						<img src='../assets/background.jpg' alt=''>
+					</div>
+
+					<div class="search-text">
+						<h1>Title</h1>
+					</div>
+				</div>
+
+
+					<div class="search-card">
+					<div class="search-image">
+						<img src='../assets/background.jpg' alt=''>
+					</div>
+
+					<div class="search-text">
+						<h1>Title</h1>
+					</div>
+				</div>
+
+					<div class="search-card">
+					<div class="search-image">
+						<img src='../assets/background.jpg' alt=''>
+					</div>
+
+					<div class="search-text">
+						<h1>Title</h1>
+					</div>
+				</div>
+			
+			</div>
 			</form>
+
+			
 		</div>
 	</section>
 
@@ -33,7 +90,6 @@ export const homepageTemplate = () => {
 					"Welcome to Script Movie – Your Cinematic Journey Starts
 					Here!"
 				</p>
-				<button class="see-more">See more</button>
 			</div>
 		</div>
 	</section>
