@@ -11,7 +11,7 @@ export const notFoundTemplate = () => {
 }
 
 const init404Page = () => {
-    document.getElementById('app-navbar').classList.add('d-none');
+    // Nothing here yet ...
 }
 
 export const hydrateNotFoundPage = () => init404Page();

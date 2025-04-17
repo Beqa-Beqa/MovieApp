@@ -82,7 +82,7 @@ header{
     right: 0;
 }
 
-.header-nav a{
+.header-nav .link{
     color: var(--accent-color-fade);
     position: relative;
     transition: .2s;
@@ -91,7 +91,8 @@ header{
 }
 
 
-.header-nav a:hover{
+.header-nav .link:hover,
+.header-nav .link.active{
     color: var(--accent-color-bold);
     background-color: var(--accent-color-fade);
 }
@@ -510,17 +511,19 @@ body:has(.loader-wrapper) {
 /* Not found ------------ */
 
 .not-found-container {
+    background-color: snow;
+    z-index: 100;
+    position: fixed;
     min-width: 100vw;
     min-height: 100vh;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .not-found-container-inner {
-    /* Temporary */
-    visibility: visible;
-    /* --------- */
     max-width: 600px;
     max-height: 600px;
     width: 100%;

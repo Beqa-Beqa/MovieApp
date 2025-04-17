@@ -1,10 +1,10 @@
 import { createMovieCard } from "../components/index.js";
-import { MOVIES } from "../enums.js";
-import { router, movieStorage } from "../init.js";
-import { watchInfiniteScroll } from "../utilities/general.js";
+import { MOVIES } from "../config/enums.js";
+import { router, movieStorage } from "../config/init.js";
+import { activateTab, watchInfiniteScroll } from "../utilities/helpers.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
-import { handleMovieClick } from "../utilities/general.js";
+import { handleMovieClick } from "../utilities/helpers.js";
 
 export const tvShowsTemplate = () => {
 	return `
@@ -19,7 +19,7 @@ export const tvShowsTemplate = () => {
 			</div>
 		</section>
     `;
-}
+};
 
 /**
  *
@@ -27,36 +27,35 @@ export const tvShowsTemplate = () => {
  * @param {MovieStorage} movieStorage MovieStorage class instance
  */
 const initTvShowsPage = async (router, movieStorage) => {
-    const moviesContainer = router.rootRef.querySelector(
-        ".movies-page-cards"
-    );
+	const moviesContainer = router.rootRef.querySelector(".movies-page-cards");
 
-    moviesContainer.addEventListener("click", (e) => handleMovieClick(e, router));
+	moviesContainer.addEventListener("click", (e) =>
+		handleMovieClick(e, router)
+	);
 
-    const appendMovies = (movies) => {
-        const moviesFragment = document.createDocumentFragment();
-        movies.forEach((movie) =>
-            moviesFragment.append(createMovieCard(movie, MOVIES.TV))
-        );
-        moviesContainer.append(moviesFragment);
-    };
+	const appendMovies = (movies) => {
+		const moviesFragment = document.createDocumentFragment();
+		movies.forEach((movie) =>
+			moviesFragment.append(createMovieCard(movie, MOVIES.TV))
+		);
+		moviesContainer.append(moviesFragment);
+	};
 
-    const moviesToAppend = await movieStorage.getTvShows({
-        page: 1,
-        reset: true,
-    });
+	const moviesToAppend = await movieStorage.getTvShows({
+		page: 1,
+		reset: true,
+	});
 
-    appendMovies(moviesToAppend);
+	appendMovies(moviesToAppend);
 
-    const fetchMoviesAndAppend = async () =>
-        appendMovies(await movieStorage.getTvShows());
-    const scrollTrigger = router.rootRef.querySelector(
-        "#scroll-trigger-element"
-    );
+	const fetchMoviesAndAppend = async () =>
+		appendMovies(await movieStorage.getTvShows());
+	const scrollTrigger = router.rootRef.querySelector(
+		"#scroll-trigger-element"
+	);
 
-    watchInfiniteScroll(scrollTrigger, fetchMoviesAndAppend);
+	watchInfiniteScroll(scrollTrigger, fetchMoviesAndAppend);
 };
 
 export const hydrateTvShowsPage = () => async () =>
-    await initTvShowsPage(router, movieStorage);
-
+	await initTvShowsPage(router, movieStorage);

@@ -1,8 +1,8 @@
-import { router, movieStorage } from "../init.js";
+import { router, movieStorage } from "../config/init.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
 import { renderMovies, renderBackdrop} from "../utilities/render.js";
-import { handleMovieClick } from "../utilities/general.js";
-import { MOVIES } from "../enums.js";
+import { handleMovieClick } from "../utilities/helpers.js";
+import { MOVIES } from "../config/enums.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
 

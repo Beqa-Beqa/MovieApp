@@ -1,4 +1,4 @@
-import { MAX_NAME_LENGTH } from "../enums.js";
+import { MAX_NAME_LENGTH } from "../config/enums.js";
 import { getImage } from "../utilities/api.js";
 
 export const createPersonCard = (actorData) => {

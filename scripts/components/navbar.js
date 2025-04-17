@@ -1,4 +1,4 @@
-import { MOVIES } from "../enums.js";
+import { MOVIES } from "../config/enums.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
 
 const initHeaderNav = () => {

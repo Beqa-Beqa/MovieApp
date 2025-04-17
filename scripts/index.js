@@ -1,4 +1,4 @@
-import { router } from "./init.js";
+import { router } from "./config/init.js";
 import { EVENT_STATES, GLOBAL_ROUTES, PARAMS } from "./router/routes.js";
 import { homepageTemplate, hydrateHomepage } from "./views/homepage.js";
 import {
@@ -14,6 +14,8 @@ import { tvShowsTemplate, hydrateTvShowsPage } from "./views/tvShows.js";
 import { initHeaderNav } from "./components/index.js";
 import { cleanupLoader, renderLoader } from "./utilities/render.js";
 import { notFoundTemplate, hydrateNotFoundPage } from "./views/404.js";
+import { MOVIES } from "./config/enums.js";
+import { deactivateTab, activateTab } from "./utilities/helpers.js";
 
 renderLoader();
 
@@ -54,14 +56,17 @@ const handleRouteChange = (router_) => {
 	switch (route) {
 		case GLOBAL_ROUTES.DEFAULT:
 		case GLOBAL_ROUTES.HOME:
+			deactivateTab();
 			[template, hydrator] = [homepageTemplate(), hydrateHomepage()];
 			break;
 
 		case GLOBAL_ROUTES.TV_SHOWS_PAGE:
+			activateTab(document.getElementById(MOVIES.TV));
 			[template, hydrator] = [tvShowsTemplate(), hydrateTvShowsPage()];
 			break;
 
 		case GLOBAL_ROUTES.POPULAR_MOVIES:
+			activateTab(document.getElementById(MOVIES.POPULAR));
 			[template, hydrator] = [
 				popularMoviesTemplate(),
 				hydratePopularMoviesPage(),
@@ -69,6 +74,7 @@ const handleRouteChange = (router_) => {
 			break;
 
 		case GLOBAL_ROUTES.NEW_MOVIES:
+			activateTab(document.getElementById(MOVIES.NEW));
 			[template, hydrator] = [
 				newMoviesTemplate(),
 				hydrateNewMoviesPage(),
@@ -76,6 +82,7 @@ const handleRouteChange = (router_) => {
 			break;
 
 		case GLOBAL_ROUTES.MOVIE_DETAILS:
+			deactivateTab();
 			[template, hydrator] = [
 				movieDetailsTemplate(),
 				hydrateMovieDetailsPage(params),
@@ -83,6 +90,7 @@ const handleRouteChange = (router_) => {
 			break;
 
 		default:
+			deactivateTab();
 			[template, hydrator] = [notFoundTemplate(), hydrateNotFoundPage()];
 			break;
 	}
