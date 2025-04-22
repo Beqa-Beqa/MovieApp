@@ -1,4 +1,4 @@
-import { router, movieStorage } from "../init.js";
+import { router, movieStorage } from "../config/init.js";
 import {
 	getCreditsByMovieId,
 	getImage,
@@ -11,9 +11,9 @@ import {
 	renderMovies,
 	renderVideoSnippetYT,
 } from "../utilities/render.js";
-import { MOVIES } from "../enums.js";
+import { MOVIES } from "../config/enums.js";
 import { createPersonCard } from "../components/index.js";
-import { handleMovieClick } from "../utilities/general.js";
+import { handleMovieClick } from "../utilities/helpers.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
 
@@ -116,7 +116,7 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 			moviesToSuggest = await movieStorage.getNewMovies({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.NEW_MOVIES;
 			break;
-			
+
 		case MOVIES.POPULAR:
 			moviesToSuggest = await movieStorage.getPopularMovies({ page: 1 });
 			routeToRedirect = GLOBAL_ROUTES.POPULAR_MOVIES;

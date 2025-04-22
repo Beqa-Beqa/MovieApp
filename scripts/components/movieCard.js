@@ -1,5 +1,5 @@
 import { getImage } from "../utilities/api.js";
-import { MOVIES } from '../enums.js';
+import { MOVIES } from '../config/enums.js';
 import { GLOBAL_ROUTES } from "../router/routes.js";
 
 export const createMovieCard = (movie, type) => {

@@ -1,11 +1,13 @@
-import { router, movieStorage } from "../init.js";
-import { GLOBAL_ROUTES } from "../router/routes.js";
-import { renderMovies, renderBackdrop} from "../utilities/render.js";
-import { handleMovieClick } from "../utilities/general.js";
-import { MOVIES } from "../enums.js";
+import { router, movieStorage } from "../config/init.js";
+import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
+import { renderMovies, renderBackdrop } from "../utilities/render.js";
+import { debounce, handleMovieClick } from "../utilities/helpers.js";
+import { MOVIES, PAGE_MOVIE_COUNT } from "../config/enums.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
-
+import { searchMovieCard, seeMoreSearchMovieCard } from "../components/index.js";
+import { getMoviesBySearch } from "../utilities/api.js";
+''
 export const homepageTemplate = () => {
 	return `
 	<!-- search  -->
@@ -14,11 +16,14 @@ export const homepageTemplate = () => {
 		<div class="search container">
 			<form class="main-search-form">
 				<input
+					id="movie-search-input"
 					class="main-search"
 					type="search"
 					placeholder="Search for Movies, Series or People"
 				/>
 				<i class="bx bx-search"></i>
+
+				<div id="search-cards-container" class="searching"><!-- Search cards go here --></div>
 			</form>
 		</div>
 	</section>
@@ -33,7 +38,6 @@ export const homepageTemplate = () => {
 					"Welcome to Script Movie – Your Cinematic Journey Starts
 					Here!"
 				</p>
-				<button class="see-more">See more</button>
 			</div>
 		</div>
 	</section>
@@ -83,7 +87,7 @@ export const homepageTemplate = () => {
 };
 
 /**
- * 
+ *
  * @param {Router} router Router class instnace
  * @param {MovieStorage} movieStorage MovieStorage class instance
  */
@@ -96,11 +100,17 @@ async function initHomepage(router, movieStorage) {
 
 	const rootElement = router.rootRef;
 
-	const newMoviesContainer = rootElement.querySelector("#new-movies-container");
+	const newMoviesContainer = rootElement.querySelector(
+		"#new-movies-container"
+	);
 	const popularMoviesContainer = rootElement.querySelector(
 		"#popular-movies-container"
 	);
 	const tvShowsContainer = rootElement.querySelector("#tv-shows-container");
+	const movieSearchInput = rootElement.querySelector("#movie-search-input");
+	const searchCardsContainer = rootElement.querySelector("#search-cards-container");
+
+	searchCardsContainer.addEventListener('click', (e) => handleMovieClick(e, router, true));
 
 	// Clear the containers before rendering new content
 	newMoviesContainer.innerHTML = "";
@@ -137,6 +147,34 @@ async function initHomepage(router, movieStorage) {
 	renderMovies(newMovies, newMoviesContainer, MOVIES.NEW);
 	renderMovies(popularMovies, popularMoviesContainer, MOVIES.POPULAR);
 	renderMovies(tvShows, tvShowsContainer, MOVIES.TV);
+
+	const getSearchLink = (search) => `${GLOBAL_ROUTES.SEARCH_PAGE}?${PARAMS.MOVIE_SEARCH}=${search}`;
+
+	const searchListener = debounce(async (search) => {
+		searchCardsContainer.innerHTML = '';
+		if(search.trim()) {
+			const fragment = document.createDocumentFragment();
+			const fetchResult = (await getMoviesBySearch(search)).data;
+			const searchedMovies = fetchResult && fetchResult.results;
+			searchedMovies && searchedMovies.forEach(movie => fragment.append(searchMovieCard(movie, MOVIES.POPULAR)));
+
+
+			if(fetchResult && fetchResult.total_results > PAGE_MOVIE_COUNT) {
+				const seeMoreCard = seeMoreSearchMovieCard();
+				seeMoreCard.addEventListener('click', () => router.route = getSearchLink(search));
+				fragment.append(seeMoreCard);
+			}
+
+			searchCardsContainer.append(fragment);
+		}
+	}, 1000);
+
+	movieSearchInput.addEventListener('input', (e) => searchListener(e.target.value));
+	movieSearchInput.addEventListener('keydown', (e) => {
+		const search = e.target.value.trim();
+		if(search && e.key === 'Enter') router.route = getSearchLink(search);
+	});
 }
 
-export const hydrateHomepage = () => async () => await initHomepage(router, movieStorage);
+export const hydrateHomepage = () => async () =>
+	await initHomepage(router, movieStorage);

@@ -1,10 +1,10 @@
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
-import { MOVIES } from "../enums.js";
-import { router, movieStorage } from "../init.js";
+import { MOVIES } from "../config/enums.js";
+import { router, movieStorage } from "../config/init.js";
 import { createMovieCard } from "../components/index.js";
-import { watchInfiniteScroll } from "../utilities/general.js";
-import { handleMovieClick } from "../utilities/general.js";
+import { activateTab, watchInfiniteScroll } from "../utilities/helpers.js";
+import { handleMovieClick } from "../utilities/helpers.js";
 
 export const popularMoviesTemplate = () => {
 	return `
@@ -26,7 +26,7 @@ export const popularMoviesTemplate = () => {
  * @param {Router} router Router class instance
  * @param {MovieStorage} movieStorage MovieStorage class instance
  */
-const initPopularMoviesPage = async (router, movieStorage) => {
+const initPopularMoviesPage = async (router, movieStorage) => {    
     const moviesContainer = router.rootRef.querySelector(
         ".movies-page-cards"
     );

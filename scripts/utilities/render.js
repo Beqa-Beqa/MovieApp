@@ -97,3 +97,16 @@ export const cleanupLoader = () => {
 
 	document.querySelectorAll('body > *:not(#overlay-loader)').forEach(element => element.classList.add('visibility-visible'));
 }
+
+/**
+ * 
+ * @param {HTMLElement} targetElement HTML Element where end of scroll text is written
+ */
+export const endOfInfiniteScroll = (targetElement, cb = undefined) => {
+	cb && cb();
+	targetElement.innerHTML = `
+		<div class="w-100 text-center">
+			<h2>End of movies</h2>
+		</div>
+	`;
+}

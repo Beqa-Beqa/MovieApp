@@ -4,7 +4,7 @@ import {
 	getPopularMovies,
 	getPopularTVShows,
 } from "../utilities/api.js";
-import { MOVIES } from '../enums.js';
+import { MOVIES } from '../config/enums.js';
 
 export class MovieStorage {
 	// Private storage map
