@@ -16,6 +16,7 @@ import { cleanupLoader, renderLoader } from "./utilities/render.js";
 import { notFoundTemplate, hydrateNotFoundPage } from "./views/404.js";
 import { MOVIES } from "./config/enums.js";
 import { deactivateTab, activateTab } from "./utilities/helpers.js";
+import { hydrateSearchedMoviesPage, searchedMoviesTemplate } from "./views/searchedMovies.js";
 
 renderLoader();
 
@@ -26,10 +27,12 @@ const getHashParams = (route_) => {
 		const queryParams = new URLSearchParams(route[1] || "");
 		const movieId = queryParams.get(PARAMS.MOVIE_ID);
 		const movieType = queryParams.get(PARAMS.MOVIE_TYPE);
+		const movieSearch = queryParams.get(PARAMS.MOVIE_SEARCH);
 
 		if (
-			routeBeforeQueryString === GLOBAL_ROUTES.MOVIE_DETAILS &&
-			(!movieId || !movieType)
+			(routeBeforeQueryString === GLOBAL_ROUTES.MOVIE_DETAILS && (!movieId || !movieType)) 
+			||
+			(routeBeforeQueryString === GLOBAL_ROUTES.SEARCH_PAGE && !movieSearch)
 		)
 			throw new Error(
 				"No movie id or movie type was provided while trying to render movie details page!"
@@ -37,7 +40,7 @@ const getHashParams = (route_) => {
 
 		return {
 			route: routeBeforeQueryString,
-			params: { movieId, movieType },
+			params: { movieId, movieType, movieSearch },
 		};
 	} catch (e) {
 		console.error(e);
@@ -86,6 +89,14 @@ const handleRouteChange = (router_) => {
 			[template, hydrator] = [
 				movieDetailsTemplate(),
 				hydrateMovieDetailsPage(params),
+			];
+			break;
+
+		case GLOBAL_ROUTES.SEARCH_PAGE:
+			deactivateTab();
+			[template, hydrator] = [
+				searchedMoviesTemplate(),
+				hydrateSearchedMoviesPage(params)
 			];
 			break;
 

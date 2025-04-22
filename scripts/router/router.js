@@ -48,6 +48,7 @@ export class Router {
 	 */
 	set route(newRoute) {
 		try {
+			window.dispatchEvent(this.#event(EVENT_STATES.LOADING));
 
 			const routeBeforeQueryString = newRoute.split("?")[0];
 			
@@ -59,6 +60,8 @@ export class Router {
 		} catch (e) {
 			console.error(`Something went wrong while changing routes: ${e}`);
 			window.location.hash = NOT_FOUND;
+		} finally {
+			window.dispatchEvent(this.#event(EVENT_STATES.LOADED));
 		}
 	}
 

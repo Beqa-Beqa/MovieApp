@@ -6,8 +6,8 @@ import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
  * @param {Event} event Event object that occured
  * @param {Router} router Router class instance
  */
-export const handleMovieClick = (event, router) => {
-	const cardElem = event.target.closest(".movie-card");
+export const handleMovieClick = (event, router, isSearchCard=false) => {
+	const cardElem = event.target.closest(isSearchCard ? ".search-card" : ".movie-card");
 	if (cardElem) {
 		const movieId = parseInt(cardElem.getAttribute("data-movie-id"));
 		const movieType = cardElem.getAttribute("data-movie-type");
@@ -65,3 +65,18 @@ export const activateTab = (element) => {
 	deactivateTab();
 	element.classList.add("active");
 };
+
+
+/**
+ * 
+ * @param {Function} fn Function to debounce
+ * @param {Time} time Time in ms for debounce delay
+ */
+export const debounce = (fn, time) => {
+	let timeoutId;
+
+	return (...args) => {
+		if(timeoutId) clearTimeout(timeoutId);
+		timeoutId = setTimeout(() => fn(...args), time);
+	}
+}

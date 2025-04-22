@@ -26,9 +26,7 @@ export const popularMoviesTemplate = () => {
  * @param {Router} router Router class instance
  * @param {MovieStorage} movieStorage MovieStorage class instance
  */
-const initPopularMoviesPage = async (router, movieStorage) => {
-    activateTab(document.getElementById(MOVIES.POPULAR));
-    
+const initPopularMoviesPage = async (router, movieStorage) => {    
     const moviesContainer = router.rootRef.querySelector(
         ".movies-page-cards"
     );

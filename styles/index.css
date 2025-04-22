@@ -45,16 +45,17 @@ header{
     position: relative;
 }
 
-.header-logo a{
+#headerLogo{
     color: var(--accent-color-fade);
     display: flex;
     align-items: center;
     gap: 4px;
-    font-size: 20px;
+    font-size: calc(15px + .8vw);
     transition: .3s;
+    cursor: pointer;
 }
 
-.header-logo a:hover{
+#headerLogo:hover{
     transform: scale(1.1);
 }
 
@@ -155,13 +156,13 @@ header{
     flex-direction: column;
     /* gap: 10px; */
     z-index: 10;
-    top: 70px;
+    top: 67px;
     width: 100%;
     background-color: white;
     max-height: 700px;
-    overflow-y: scroll;
-    box-shadow: 3px 3px 3px black;
+    overflow-y: auto;
     max-width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .search-card{
@@ -182,7 +183,8 @@ header{
 
 .search-image img{
     width: 200px;
-    height: 120px;
+    height: 200px;
+    object-fit: contain;
 }
 
 /* ==================================== */
@@ -402,7 +404,6 @@ header{
     box-shadow: 2px 2px 2px var(--accent-color-bold);
     cursor: pointer;
     transition: .3s;
-    z-index: 4;
     overflow-x: hidden;
 }
 
@@ -417,7 +418,6 @@ header{
 
 .movie-card:hover{
     transform: scale(1.04);
-    z-index: 20;
 }
 
 .movie-card img{

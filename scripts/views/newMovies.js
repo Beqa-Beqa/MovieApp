@@ -2,7 +2,7 @@ import { createMovieCard } from "../components/index.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
 import { router, movieStorage } from "../config/init.js";
-import { activateTab, handleMovieClick, watchInfiniteScroll } from "../utilities/helpers.js";
+import { handleMovieClick, watchInfiniteScroll } from "../utilities/helpers.js";
 import { MOVIES } from "../config/enums.js";
 
 export const newMoviesTemplate = () => {
@@ -26,8 +26,6 @@ export const newMoviesTemplate = () => {
  * @param {MovieStorage} movieStorage MovieStorage class instance
  */
 const initNewMoviesPage = async (router, movieStorage) => {
-	activateTab(document.getElementById(MOVIES.NEW));
-
 	const moviesContainer = router.rootRef.querySelector(".movies-page-cards");
 
 	moviesContainer.addEventListener("click", (e) =>
