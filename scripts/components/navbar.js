@@ -1,5 +1,6 @@
 import { MOVIES } from "../config/enums.js";
 import { GLOBAL_ROUTES } from "../router/routes.js";
+import { addEventOnce } from "../utilities/helpers.js";
 
 const initHeaderNav = () => {
 	const header = document.querySelector(".header");
@@ -7,7 +8,7 @@ const initHeaderNav = () => {
 	const overlay = document.querySelector(".overlay");
 
 	// Populate href attributes in header links
-	headerNavElement.querySelectorAll('a').forEach(link => {
+	headerNavElement.querySelectorAll("a").forEach((link) => {
 		let route;
 		switch (link.id) {
 			case MOVIES.NEW:
@@ -21,10 +22,10 @@ const initHeaderNav = () => {
 				break;
 		}
 
-		link.setAttribute('href', route);
-	})
+		link.setAttribute("href", route);
+	});
 
-	header.addEventListener("click", (e) => {
+	const handleNavigation = (e) => {
 		const hideBurgerMenu = () => {
 			headerNavElement.classList.remove("show");
 			overlay.classList.remove("d-block");
@@ -50,7 +51,9 @@ const initHeaderNav = () => {
 				showBurgerMenu();
 				break;
 		}
-	});
+	};
+
+	addEventOnce("click", header, handleNavigation);
 };
 
 export default initHeaderNav;

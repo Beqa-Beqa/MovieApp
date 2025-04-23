@@ -80,3 +80,19 @@ export const debounce = (fn, time) => {
 		timeoutId = setTimeout(() => fn(...args), time);
 	}
 }
+
+
+/**
+ *
+ * @param {EventName} evenNamet Event name 
+ * @param {HTMLElement} container Container to which mouse over listener is added
+ * @param {Function} handler Function that handles the mouse over event
+ */
+export const addEventOnce = (eventName, container, handler) => {
+	const capitalizedEventName = eventName[0].toUpperCase() + eventName.slice(1);
+	const eventProp = `has${capitalizedEventName}Event`;
+	if(!container[eventProp]) {
+		container.addEventListener(eventName, handler);
+		container[eventProp] = true;
+	}
+}

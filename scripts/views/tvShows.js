@@ -1,7 +1,11 @@
 import { createMovieCard } from "../components/index.js";
 import { MOVIES } from "../config/enums.js";
 import { router, movieStorage } from "../config/init.js";
-import { activateTab, watchInfiniteScroll } from "../utilities/helpers.js";
+import {
+	activateTab,
+	addEventOnce,
+	watchInfiniteScroll,
+} from "../utilities/helpers.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
 import { handleMovieClick } from "../utilities/helpers.js";
@@ -29,9 +33,9 @@ export const tvShowsTemplate = () => {
 const initTvShowsPage = async (router, movieStorage) => {
 	const moviesContainer = router.rootRef.querySelector(".movies-page-cards");
 
-	moviesContainer.addEventListener("click", (e) =>
-		handleMovieClick(e, router)
-	);
+	addEventOnce("click", moviesContainer, (e) => {
+		handleMovieClick(e, router);
+	});
 
 	const appendMovies = (movies) => {
 		const moviesFragment = document.createDocumentFragment();

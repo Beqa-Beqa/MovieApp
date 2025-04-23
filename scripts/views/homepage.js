@@ -1,13 +1,20 @@
 import { router, movieStorage } from "../config/init.js";
 import { GLOBAL_ROUTES, PARAMS } from "../router/routes.js";
 import { renderMovies, renderBackdrop } from "../utilities/render.js";
-import { debounce, handleMovieClick } from "../utilities/helpers.js";
+import {
+	addEventOnce,
+	debounce,
+	handleMovieClick,
+} from "../utilities/helpers.js";
 import { MOVIES, PAGE_MOVIE_COUNT } from "../config/enums.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
-import { searchMovieCard, seeMoreSearchMovieCard } from "../components/index.js";
+import {
+	searchMovieCard,
+	seeMoreSearchMovieCard,
+} from "../components/index.js";
 import { getMoviesBySearch } from "../utilities/api.js";
-''
+("");
 export const homepageTemplate = () => {
 	return `
 	<!-- search  -->
@@ -51,7 +58,7 @@ export const homepageTemplate = () => {
 				<a href=${GLOBAL_ROUTES.NEW_MOVIES} class="title">New Movies</a>
 			</div>
 
-			<div id="new-movies-container" class="movie-cards-container"><!-- New movies go here --></div>
+			<div data-mouseover-event="" id="new-movies-container" class="movie-cards-container"><!-- New movies go here --></div>
 		</div>
 	</section>
 
@@ -64,7 +71,7 @@ export const homepageTemplate = () => {
 				<a href=${GLOBAL_ROUTES.POPULAR_MOVIES} class="title">Popular Movies</a>
 			</div>
 
-			<div id="popular-movies-container" class="movie-cards-container"><!-- Popular movies go here --></div>
+			<div data-mouseover-event="" id="popular-movies-container" class="movie-cards-container"><!-- Popular movies go here --></div>
 		</div>
 	</section>
 
@@ -77,7 +84,7 @@ export const homepageTemplate = () => {
 				<a href=${GLOBAL_ROUTES.TV_SHOWS_PAGE} class="title">TV-shows</a>
 			</div>
 
-			<div id="tv-shows-container" class="movie-cards-container"><!-- Tv shows go here --></div>
+			<div data-mouseover-event="" id="tv-shows-container" class="movie-cards-container"><!-- Tv shows go here --></div>
 		</div>
 	</section>
 
@@ -108,9 +115,13 @@ async function initHomepage(router, movieStorage) {
 	);
 	const tvShowsContainer = rootElement.querySelector("#tv-shows-container");
 	const movieSearchInput = rootElement.querySelector("#movie-search-input");
-	const searchCardsContainer = rootElement.querySelector("#search-cards-container");
+	const searchCardsContainer = rootElement.querySelector(
+		"#search-cards-container"
+	);
 
-	searchCardsContainer.addEventListener('click', (e) => handleMovieClick(e, router, true));
+	searchCardsContainer.addEventListener("click", (e) =>
+		handleMovieClick(e, router, true)
+	);
 
 	// Clear the containers before rendering new content
 	newMoviesContainer.innerHTML = "";
@@ -127,52 +138,59 @@ async function initHomepage(router, movieStorage) {
 		"#tv-shows-section-container"
 	);
 
-	newMoviesContainer.addEventListener("mouseover", (e) =>
+	addEventOnce("mouseover", newMoviesContainer, (e) =>
 		renderBackdrop(e, newMoviesSectionContainer)
 	);
-	popularMoviesContainer.addEventListener("mouseover", (e) =>
+	addEventOnce("mouseover", popularMoviesContainer, (e) =>
 		renderBackdrop(e, popularMoviesSectionContainer)
 	);
-	tvShowsContainer.addEventListener("mouseover", (e) =>
+	addEventOnce("mouseover", tvShowsContainer, (e) =>
 		renderBackdrop(e, tvShowsSectionContainer)
 	);
 
 	[newMoviesContainer, popularMoviesContainer, tvShowsContainer].forEach(
 		(container) =>
-			container.addEventListener("click", (e) =>
-				handleMovieClick(e, router)
-			)
+			addEventOnce("click", container, (e) => handleMovieClick(e, router))
 	);
 
 	renderMovies(newMovies, newMoviesContainer, MOVIES.NEW);
 	renderMovies(popularMovies, popularMoviesContainer, MOVIES.POPULAR);
 	renderMovies(tvShows, tvShowsContainer, MOVIES.TV);
 
-	const getSearchLink = (search) => `${GLOBAL_ROUTES.SEARCH_PAGE}?${PARAMS.MOVIE_SEARCH}=${search}`;
+	const getSearchLink = (search) =>
+		`${GLOBAL_ROUTES.SEARCH_PAGE}?${PARAMS.MOVIE_SEARCH}=${search}`;
 
 	const searchListener = debounce(async (search) => {
-		searchCardsContainer.innerHTML = '';
-		if(search.trim()) {
+		searchCardsContainer.innerHTML = "";
+		if (search.trim()) {
 			const fragment = document.createDocumentFragment();
 			const fetchResult = (await getMoviesBySearch(search)).data;
 			const searchedMovies = fetchResult && fetchResult.results;
-			searchedMovies && searchedMovies.forEach(movie => fragment.append(searchMovieCard(movie, MOVIES.POPULAR)));
+			searchedMovies &&
+				searchedMovies.forEach((movie) =>
+					fragment.append(searchMovieCard(movie, MOVIES.POPULAR))
+				);
 
-
-			if(fetchResult && fetchResult.total_results > PAGE_MOVIE_COUNT) {
+			if (fetchResult && fetchResult.total_results > PAGE_MOVIE_COUNT) {
 				const seeMoreCard = seeMoreSearchMovieCard();
-				seeMoreCard.addEventListener('click', () => router.route = getSearchLink(search));
+				addEventOnce(
+					"click",
+					seeMoreCard,
+					() => (router.route = getSearchLink(search))
+				);
 				fragment.append(seeMoreCard);
 			}
 
 			searchCardsContainer.append(fragment);
 		}
-	}, 1000);
+	}, 700);
 
-	movieSearchInput.addEventListener('input', (e) => searchListener(e.target.value));
-	movieSearchInput.addEventListener('keydown', (e) => {
+	addEventOnce("input", movieSearchInput, (e) =>
+		searchListener(e.target.value)
+	);
+	addEventOnce("keydown", movieSearchInput, (e) => {
 		const search = e.target.value.trim();
-		if(search && e.key === 'Enter') router.route = getSearchLink(search);
+		if (search && e.key === "Enter") router.route = getSearchLink(search);
 	});
 }
 

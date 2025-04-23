@@ -2,7 +2,11 @@ import { Router } from "../router/router.js";
 import { router } from "../config/init.js";
 import { NOT_FOUND } from "../router/routes.js";
 import { getMoviesBySearch } from "../utilities/api.js";
-import { handleMovieClick, watchInfiniteScroll } from "../utilities/helpers.js";
+import {
+	addEventOnce,
+	handleMovieClick,
+	watchInfiniteScroll,
+} from "../utilities/helpers.js";
 import { MOVIES, PAGE_MOVIE_COUNT } from "../config/enums.js";
 import { createMovieCard } from "../components/movieCard.js";
 import { endOfInfiniteScroll } from "../utilities/render.js";
@@ -29,7 +33,7 @@ export const searchedMoviesTemplate = () => {
  * @param {Params} params Search parameters from hash
  */
 const initSearchedMoviesPage = async (router, params) => {
-	if (!params.movieSearch) return router.route = NOT_FOUND;
+	if (!params.movieSearch) return (router.route = NOT_FOUND);
 	let pageOfSearch = 1;
 
 	router.rootRef.querySelector(
@@ -38,9 +42,7 @@ const initSearchedMoviesPage = async (router, params) => {
 
 	const moviesContainer = router.rootRef.querySelector(".movies-page-cards");
 
-	moviesContainer.addEventListener("click", (e) =>
-		handleMovieClick(e, router)
-	);
+	addEventOnce("click", moviesContainer, (e) => handleMovieClick(e, router));
 
 	const appendMovies = (movies) => {
 		if (movies && movies.length) {
@@ -66,14 +68,14 @@ const initSearchedMoviesPage = async (router, params) => {
 		);
 
 		if (movieFetchResult.success) {
-            pageOfSearch++;
+			pageOfSearch++;
 			const movies = movieFetchResult.data.results;
 			appendMovies(movies);
 
 			return {
-                totalResults: movieFetchResult.data.total_results,
-                currentResults: movies.length
-            }
+				totalResults: movieFetchResult.data.total_results,
+				currentResults: movies.length,
+			};
 		}
 	};
 
@@ -85,13 +87,15 @@ const initSearchedMoviesPage = async (router, params) => {
 
 	if (count.totalResults && count.totalResults > PAGE_MOVIE_COUNT) {
 		const unobserve = watchInfiniteScroll(scrollTrigger, async () => {
-            const count = await fetchMoviesAndAppend();
-            if(count.currentResults < PAGE_MOVIE_COUNT) {
-                const scrollEndElement = router.rootRef.querySelector('#scroll-end-element');
-                endOfInfiniteScroll(scrollEndElement, unobserve);
-            }
-        });
-    }
+			const count = await fetchMoviesAndAppend();
+			if (count.currentResults < PAGE_MOVIE_COUNT) {
+				const scrollEndElement = router.rootRef.querySelector(
+					"#scroll-end-element"
+				);
+				endOfInfiniteScroll(scrollEndElement, unobserve);
+			}
+		});
+	}
 };
 
 export const hydrateSearchedMoviesPage = (params) => async () =>

@@ -2,7 +2,11 @@ import { createMovieCard } from "../components/index.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
 import { router, movieStorage } from "../config/init.js";
-import { handleMovieClick, watchInfiniteScroll } from "../utilities/helpers.js";
+import {
+	addEventOnce,
+	handleMovieClick,
+	watchInfiniteScroll,
+} from "../utilities/helpers.js";
 import { MOVIES } from "../config/enums.js";
 
 export const newMoviesTemplate = () => {
@@ -28,9 +32,9 @@ export const newMoviesTemplate = () => {
 const initNewMoviesPage = async (router, movieStorage) => {
 	const moviesContainer = router.rootRef.querySelector(".movies-page-cards");
 
-	moviesContainer.addEventListener("click", (e) =>
-		handleMovieClick(e, router)
-	);
+	addEventOnce("click", moviesContainer, (e) => {
+		handleMovieClick(e, router);
+	});
 
 	const appendMovies = (movies) => {
 		const moviesFragment = document.createDocumentFragment();
