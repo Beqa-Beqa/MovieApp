@@ -13,7 +13,7 @@ import {
 } from "../utilities/render.js";
 import { MOVIES } from "../config/enums.js";
 import { createPersonCard } from "../components/index.js";
-import { handleMovieClick } from "../utilities/helpers.js";
+import { addEventOnce, handleMovieClick } from "../utilities/helpers.js";
 import { Router } from "../router/router.js";
 import { MovieStorage } from "../store/storage.js";
 
@@ -68,9 +68,8 @@ export const movieDetailsTemplate = (movieData = {}) => {
 	`;
 };
 
-
 /**
- * 
+ *
  * @param {Router} router Route class instance
  * @param {MovieStorage} movieStorage MovieStorage class instance
  * @param {params} params Parameters received in url hash
@@ -194,10 +193,12 @@ async function initMovieDetailsPage(router, movieStorage, params) {
 	renderMovies(moviesToSuggest, moviesContainer, params.movieType, [
 		movie.id,
 	]);
-	moviesContainer.addEventListener("click", (e) => {
+
+	addEventOnce("click", moviesContainer, (e) => {
 		handleMovieClick(e, router);
 	});
-	moviesContainer.addEventListener("mouseover", (e) => {
+
+	addEventOnce("mouseover", moviesContainer, (e) => {
 		renderBackdrop(e, moviesSection);
 	});
 }
