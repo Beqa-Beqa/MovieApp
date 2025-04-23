@@ -8,7 +8,7 @@ import {
 	watchInfiniteScroll,
 } from "../utilities/helpers.js";
 import { MOVIES, PAGE_MOVIE_COUNT } from "../config/enums.js";
-import { createMovieCard } from "../components/movieCard.js";
+import { createMovieCard, injectMovieLoader, removeMovieLoader } from "../components/index.js";
 import { endOfInfiniteScroll } from "../utilities/render.js";
 
 export const searchedMoviesTemplate = () => {
@@ -22,6 +22,7 @@ export const searchedMoviesTemplate = () => {
 				<div class="movies-page-cards"><!-- Cards go here --></div>
 				<div id="scroll-trigger-element"></div>
                 <div id="scroll-end-element"></div>
+				<div id="movie-loader-container"></div>
 			</div>
 		</section>
     `;
@@ -85,8 +86,13 @@ const initSearchedMoviesPage = async (router, params) => {
 		"#scroll-trigger-element"
 	);
 
+	const loaderContainer = router.rootRef.querySelector('#movie-loader-container');
+
 	if (count.totalResults && count.totalResults > PAGE_MOVIE_COUNT) {
-		const unobserve = watchInfiniteScroll(scrollTrigger, async () => {
+		let unobserve;
+		const intersectionAction = async () => {
+			injectMovieLoader(loaderContainer);
+
 			const count = await fetchMoviesAndAppend();
 			if (count.currentResults < PAGE_MOVIE_COUNT) {
 				const scrollEndElement = router.rootRef.querySelector(
@@ -94,7 +100,13 @@ const initSearchedMoviesPage = async (router, params) => {
 				);
 				endOfInfiniteScroll(scrollEndElement, unobserve);
 			}
-		});
+		}
+
+		const disIntersectionAction = () => {
+			removeMovieLoader(loaderContainer);
+		}
+
+		unobserve = watchInfiniteScroll(scrollTrigger, intersectionAction, disIntersectionAction);
 	}
 };
 

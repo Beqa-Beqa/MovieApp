@@ -1,8 +1,7 @@
-import { createMovieCard } from "../components/index.js";
+import { createMovieCard, injectMovieLoader, removeMovieLoader } from "../components/index.js";
 import { MOVIES } from "../config/enums.js";
 import { router, movieStorage } from "../config/init.js";
 import {
-	activateTab,
 	addEventOnce,
 	watchInfiniteScroll,
 } from "../utilities/helpers.js";
@@ -20,6 +19,7 @@ export const tvShowsTemplate = () => {
 
 				<div class="movies-page-cards"><!-- Cards go here --></div>
 				<div id="scroll-trigger-element"></div>
+				<div id="movie-loader-container"></div>
 			</div>
 		</section>
     `;
@@ -58,7 +58,18 @@ const initTvShowsPage = async (router, movieStorage) => {
 		"#scroll-trigger-element"
 	);
 
-	watchInfiniteScroll(scrollTrigger, fetchMoviesAndAppend);
+	const loaderContainer = router.rootRef.querySelector('#movie-loader-container');
+    
+    const intersectionAction = async () => {
+        injectMovieLoader(loaderContainer);
+        await fetchMoviesAndAppend();
+    }
+
+    const disIntersectionAction = () => {
+        removeMovieLoader(loaderContainer);
+    }
+
+	watchInfiniteScroll(scrollTrigger, intersectionAction, disIntersectionAction);
 };
 
 export const hydrateTvShowsPage = () => async () =>

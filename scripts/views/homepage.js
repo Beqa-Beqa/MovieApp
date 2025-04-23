@@ -14,7 +14,7 @@ import {
 	seeMoreSearchMovieCard,
 } from "../components/index.js";
 import { getMoviesBySearch } from "../utilities/api.js";
-("");
+
 export const homepageTemplate = () => {
 	return `
 	<!-- search  -->
